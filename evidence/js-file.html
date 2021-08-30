@@ -74,11 +74,12 @@ I needed to find out how to load my JSON bus routes and bus stops file from the 
 	var routedata;
 	
 	function loadData(){
-	// load JSON data
-	getJSON('./json/busroutes.json');
+		// load JSON data
+		getJSON('./json/busroutes.json');
 
-    //Show the name of the first bus route
-    showResultWithNewline (routedata.busroutes[0].name);
+		alert(routedata);
+    		//Show the name of the first bus route
+    		showResultWithNewline (routedata.busroutes[0].name);
     
 	}
 	
@@ -91,7 +92,9 @@ I needed to find out how to load my JSON bus routes and bus stops file from the 
 	}
 
 	function processJSON(JSONData){
+		alert(1);
 		routedata = JSONData;
+		alert(2);
 	}
 
     //This function adds the supplied string to the end of what's already in the div
