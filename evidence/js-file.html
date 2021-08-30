@@ -75,7 +75,7 @@ I needed to find out how to load my JSON bus routes and bus stops file from the 
 	
 	function loadData(){
 	// load JSON data
-	getJSON('json/busroutes.json');
+	getJSON('./json/busroutes.json');
 
     //Show the name of the first bus route
     showResultWithNewline (routedata.busroutes[0].name);
@@ -84,13 +84,14 @@ I needed to find out how to load my JSON bus routes and bus stops file from the 
 	
 	//Gets the content of a file in JSON format
 	function getJSON(path) {
-		return fetch("json/busroutes.json")
+		return fetch(path)
 		  .then(response => response.json())
 		  .then(result => processJSON(result))
 		  .catch(error => showError(error));
 	}
 
 	function processJSON(JSONData){
+		alert (JSONData);
 		routedata = JSON.parse(JSONData);
 	}
 
