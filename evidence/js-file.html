@@ -53,7 +53,7 @@ I needed to find out how to load my JSON bus routes and bus stops file from the 
     <div id="divResult"></div>
 </div>
 	<div id="divError"></div>
-<a href="javascript:loadData();">Load The Data</a><br/>
+<a href="javascript:getJSON('./json/busroutes.json');">Load The Data</a><br/>
 <a href="javascript:viewSource();">View Source</a>
     <script>
       function viewSource(){;
@@ -73,16 +73,6 @@ I needed to find out how to load my JSON bus routes and bus stops file from the 
 	//Variable to hold the data
 	var routedata;
 	
-	function loadData(){
-		// load JSON data
-		getJSON('./json/busroutes.json');
-
-		alert(routedata);
-    		//Show the name of the first bus route
-    		showResultWithNewline (routedata.busroutes[0].name);
-    
-	}
-	
 	//Gets the content of a file in JSON format
 	function getJSON(path) {
 		return fetch(path)
@@ -92,9 +82,12 @@ I needed to find out how to load my JSON bus routes and bus stops file from the 
 	}
 
 	function processJSON(JSONData){
-		alert(1);
+		
 		routedata = JSONData;
-		alert(2);
+		
+		//Show the name of the first bus route
+    		showResultWithNewline (routedata.busroutes[0].name);
+		
 	}
 
     //This function adds the supplied string to the end of what's already in the div
