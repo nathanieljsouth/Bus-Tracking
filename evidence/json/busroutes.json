@@ -1,0 +1,28 @@
+{
+	"busroutes": [
+		{
+			"id":"r17", "name":"Route 17",
+			"busstops":[
+				{"id":"s17-1", "name":"Route 17 Stop 1 - 100 Vic Ave"},
+				{"id":"s17-2", "name":"Route 17 Stop 2 - 23 Bay St"},
+				{"id":"s17-3", "name":"Route 17 Stop 3 - 34 High Rd"},
+				{"id":"s17-4", "name":"Route 17 Stop 4 - 114 Main Rd"}
+			]
+		},
+		{
+			"id":"r20", "name":"Route 20",
+			"busstops":[
+				{"id":"s20-1", "name":"Route 20 Stop 1 - 67 New Rd"},
+				{"id":"s20-2", "name":"Route 20 Stop 2 - 93 Beach Rd"},
+				{"id":"s20-3", "name":"Route 20 Stop 3 - 198 Park Rd"}
+			]
+		},
+		{
+			"id":"r25", "name":"Route 25",
+			"busstops":[
+				{"id":"s25-1", "route":"r25", "name":"Route 25 Stop 1 - 12 Tree Rd"},
+				{"id":"s25-2", "route":"r25", "name":"Route 25 Stop 2 - 29 Hill Rd"}
+			]
+		}
+	]
+}

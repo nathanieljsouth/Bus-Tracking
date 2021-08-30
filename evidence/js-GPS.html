@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Tracking Project Evidence</title>
+    <link href="https://fonts.googleapis.com/css?family=Cardo|Oswald&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .flex-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .flex-container > div {
+          background-color: #6ad5cb;
+          width: 500px;
+          margin: 10px;
+          text-align: center;
+          line-height: 50px;
+          font-size: 30px;
+        }
+
+        .flex-container > div > span {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    
+<div class="navigation">
+    <ul>
+        <li>
+            <a href="index.html"><img class="navimage" width="90px" src="images/logo.png"></a>
+        </li>
+        <li>
+            <a class="navlink" href="index.html">Back to Menu</a>
+        </li>
+    </ul>
+</div>
+<h1>Javascript GPS usage</h1>
+
+<p>
+I need to find out how to get the current location from the browser's HTML5 support.
+</p>
+<p>
+For this to work the user has to allow access to the location - this won't be a problem for the bus tracker page as it will always be given permission.
+</p>
+
+<div class="flex-container">
+    <div id="divResult"></div>
+</div>
+
+<a href="javascript:viewSource();">View Source</a>
+    <script>
+      function viewSource(){;
+            var source = "<html>";
+            source += document.getElementsByTagName('html')[0].innerHTML;
+            source += "</html>";
+            source = source.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            source = "<pre>"+source+"</pre>";
+            sourceWindow = window.open('','Source of page','height=800,width=800,scrollbars=1,resizable=1');
+            sourceWindow.document.write(source);
+            sourceWindow.document.close(); 
+            if(window.focus) sourceWindow.focus();
+        }  
+
+	getLocation();
+
+	//Get the location and display it
+	function getLocation() {
+	  if (navigator.geolocation) {
+		//The getCurrentPositon method takes a callback function as a parameter for success and also one for error
+		navigator.geolocation.getCurrentPosition(displayPosition, displayError);
+	  } else { 
+		showResultWithNewline ("Geolocation is not supported by this browser.");
+	  }
+	}
+
+	function displayPosition(position) {
+	  //Show the latitude and longitude
+	  showResultWithNewline("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude);
+	  
+	  //Show a link to Google Maps with the latitude and longitude returned
+	  showResultWithNewline("<a target=new href=https://maps.google.com/?q=" + position.coords.latitude + "," + position.coords.longitude + ">See this on a map</a>");
+	}	
+
+	function displayError(error) {
+		if (error.code==1){
+			showResultWithNewline("Access to location denied by user");
+			}
+		else if (error.code==2){
+			showResultWithNewline("Location unavailable");
+			}
+		else if (error.code==3){
+			showResultWithNewline("Timeout while trying to get location");
+			}
+	}		
+
+    //This function adds the supplied string to the end of what's already in the div
+    function showResultWithNewline(TextToShow) {
+      document.getElementById("divResult").innerHTML += TextToShow + "<br/>";
+    }
+
+    
+</script>
+    </body>
+</html>

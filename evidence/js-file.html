@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Tracking Project Evidence</title>
+    <link href="https://fonts.googleapis.com/css?family=Cardo|Oswald&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .flex-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .flex-container > div {
+          background-color: #6ad5cb;
+          width: 500px;
+          margin: 10px;
+          text-align: center;
+          line-height: 50px;
+          font-size: 30px;
+        }
+
+        .flex-container > div > span {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    
+<div class="navigation">
+    <ul>
+        <li>
+            <a href="index.html"><img class="navimage" width="90px" src="images/logo.png"></a>
+        </li>
+        <li>
+            <a class="navlink" href="index.html">Back to Menu</a>
+        </li>
+    </ul>
+</div>
+<h1>Javascript Data From File</h1>
+
+<p>
+I needed to find out how to load my JSON bus routes and bus stops file from the server when the user interface loads.
+</p>
+
+
+<div class="flex-container">
+    <div id="divResult"></div>
+</div>
+	<div id="divError"></div>
+<a href="javascript:loadData();">Load The Data</a><br/>
+<a href="javascript:viewSource();">View Source</a>
+    <script>
+      function viewSource(){;
+            var source = "<html>";
+            source += document.getElementsByTagName('html')[0].innerHTML;
+            source += "</html>";
+            source = source.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            source = "<pre>"+source+"</pre>";
+            sourceWindow = window.open('','Source of page','height=800,width=800,scrollbars=1,resizable=1');
+            sourceWindow.document.write(source);
+            sourceWindow.document.close(); 
+            if(window.focus) sourceWindow.focus();
+        }  
+
+	//Get the content of the JSON file from the server in JSON format and display a property in the DIV
+
+	//Variable to hold the data
+	var routedata;
+	
+	function loadData(){
+	// load JSON data
+	getJSON('json/busroutes.json');
+
+    //Show the name of the first bus route
+    showResultWithNewline (routedata.busroutes[0].name);
+    
+	}
+	
+	//Gets the content of a file in JSON format
+	function getJSON(path) {
+		return fetch("json/busroutes.json")
+		  .then(response => response.json())
+		  .then(result => processJSON(result))
+		  .catch(error => showError(error));
+	}
+
+	function processJSON(JSONData){
+		routedata = JSON.parse(JSONData);
+	}
+
+    //This function adds the supplied string to the end of what's already in the div
+    function showResultWithNewline(TextToShow) {
+      document.getElementById("divResult").innerHTML += TextToShow + "<br/>";
+    }
+
+    //This function shows the error 
+	function showError(ErrorToShow){
+		document.getElementById('divError').innerHTML=ErrorToShow;
+	};
+    
+</script>
+    </body>
+</html>

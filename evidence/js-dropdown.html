@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Tracking Project Evidence</title>
+    <link href="https://fonts.googleapis.com/css?family=Cardo|Oswald&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .flex-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .flex-container > div {
+          background-color: #6ad5cb;
+          width: 500px;
+          margin: 10px;
+          text-align: center;
+          line-height: 50px;
+          font-size: 30px;
+        }
+
+        .flex-container > div > span {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    
+<div class="navigation">
+    <ul>
+        <li>
+            <a href="index.html"><img class="navimage" width="90px" src="images/logo.png"></a>
+        </li>
+        <li>
+            <a class="navlink" href="index.html">Back to Menu</a>
+        </li>
+    </ul>
+</div>
+<h1>Javascript Dropdown Population</h1>
+
+<p>
+I need to find out how to populate a dropdown with data from my JSON file so I can load the routes and stops into dropdowns appropriately.  I need to populate the routes when the page loads and then load the stops for the route that the user selects.
+</p>
+
+
+<div class="flex-container">
+    <div id="divResult"></div>
+</div>
+
+<select id="drpBus" onchange="busChanged()"></select>
+<br/>
+<a href="javascript:viewSource();">View Source</a>
+    <script>
+      function viewSource(){;
+            var source = "<html>";
+            source += document.getElementsByTagName('html')[0].innerHTML;
+            source += "</html>";
+            source = source.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            source = "<pre>"+source+"</pre>";
+            sourceWindow = window.open('','Source of page','height=800,width=800,scrollbars=1,resizable=1');
+            sourceWindow.document.write(source);
+            sourceWindow.document.close(); 
+            if(window.focus) sourceWindow.focus();
+        }  
+
+	//Load the bus routes into the dropdown - the value of each item will be the id, and the text is the route name
+	loadroutes();
+   
+    //This function adds the supplied string to the end of what's already in the div
+    function showResultWithNewline(TextToShow) {
+      document.getElementById("divResult").innerHTML += TextToShow + "<br/>";
+    }
+
+	//This function loads the routes into the dropdown
+	function loadroutes(){
+	
+		//Create the busdata object from the JSON
+		var busdata=JSON.parse('{"busroutes": [{"id":"r17", "name":"Route 17"},{"id":"r20", "name":"Route 20"},{"id":"r25", "name":"Route 25"}]}');
+		
+		var theDropdown = document.getElementById("drpBus");
+		
+		
+		for (routeCounter in busdata.busroutes){
+			var theDropdownOption = document.createElement("option");
+			theDropdownOption.text = busdata.busroutes[routeCounter].name;
+			theDropdownOption.value = busdata.busroutes[routeCounter].id;
+			
+			theDropdown.add(theDropdownOption);
+		}
+	} 	
+	
+	function busChanged(){
+		//We will need to load the bus stops here, and display the route and stops on the map
+		//For this demo, we're just going to alert the value of the bus route selected
+		alert("You've selected the option with value " + document.getElementById("drpBus").value);
+	}
+    
+</script>
+    </body>
+</html>
