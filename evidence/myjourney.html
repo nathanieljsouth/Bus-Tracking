@@ -27,7 +27,14 @@
     
 <p>I found that the javascript fetch() method does not support loading local files using the 'file://' protocol.  This meant that I couldn't test loading the JSON file without deploying the website to github.  This took me a few hours to figure out why it didn't work.</p>
 
-<p>Setting up a Google Maps APIK key, which involves creating a billing account with Google, was pretty complex to understand.  I found it hard to understand what needed to be configured and it was quite a lot of trial and error involved.</p>
+<p>Setting up a Google Maps API key, which involves creating a billing account with Google, was pretty complex to understand.  I found it hard to understand what needed to be configured and it was quite a lot of trial and error involved.  You have to set up a new Google Project and enable the maps API, create a new set of API credentials in the project, and make sure your account is connected to a payment method.</p>
+
+<p>As soon as I uploaded my source code to github, Google mailed me because I was using an unrestricted API key that would allow anyone to use the key for mapping.  The message looked like this (the API key has been covered up)</p>
+<img src="images/map-google-warning.jpg" width="500px">
+
+<p>I fixed this by going into the Google API manager and setting a website restriction as below:</p>
+<img src="images/map-api-key-restriction.jpg" width="500px">
+
 
     
 </body>
