@@ -22,13 +22,16 @@
     </ul>
 </div>
 <h1>Display a single pin for the bus</h1>
-
+<p>
+I need to find out how to display a marker on a Google Map in a certain location and using a specific icon.  This will be used to show the user the location of the bus.
+</p>
 
 <div id="divMap" style="width:800px;height:400px;margin: auto;padding: 10px;"></div>
 <div id="divZoom" style="margin: auto;padding: 10px;"></div>
 <a href="javascript:zoomIn();">Zoom In</a></br>
 <a href="javascript:zoomOut();">Zoom Out</a></br>
 <a href="javascript:displayPin();">Display Pin</a></br>
+<a href="javascript:movePin();">Move Pin</a></br>
 <a href="javascript:viewSource();">View Source</a>
     <script>
       function viewSource(){;
@@ -45,6 +48,9 @@
 
 		//This variable will hold the map, so I can zoom it in other methods and load the pin onto it
 		var map;
+		
+		//This variable will hold the marker, so I use it across methods
+		var marker;
 		
 		function displayMap() {
 			//This variable holds the map properties (Google Maps defines what this must look like)
@@ -68,15 +74,22 @@
 		}
 		
 		function displayPin() {
-			//This variable holds the marker properties (Google Maps defines what this must look like)
+			//The marker properties are defined by Google Maps
 			//The marker definition contains a location and an icon
-			var marker = new google.maps.Marker({
+			//The marker displays at St Kents location
+			marker = new google.maps.Marker({
 					position:new google.maps.LatLng(-36.910555286082634, 174.87601519824528),
 					icon:'images/bus40x40.png'
 				});
 			
 			//Show the marker
 			marker.setMap(map);
+		}
+		
+		function movePin(){
+		
+			//Move the marker
+			marker.setPosition(new google.maps.LatLng(-36.8934912,174.8041728));
 		}
 		
 		function showZoom(){
