@@ -24,7 +24,68 @@
 <h1>Display a single pin for the bus</h1>
 
 
+<div id="divMap" style="width:800px;height:400px;margin: auto;padding: 10px;"></div>
+<div id="divZoom" style="margin: auto;padding: 10px;"></div>
+<a href="javascript:zoomIn();">Zoom In</a></br>
+<a href="javascript:zoomOut();">Zoom Out</a></br>
+<a href="javascript:displayPin();">Display Pin</a></br>
+<a href="javascript:viewSource();">View Source</a>
+    <script>
+      function viewSource(){;
+            var source = "<html>";
+            source += document.getElementsByTagName('html')[0].innerHTML;
+            source += "</html>";
+            source = source.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            source = "<pre>"+source+"</pre>";
+            sourceWindow = window.open('','Source of page','height=800,width=800,scrollbars=1,resizable=1');
+            sourceWindow.document.write(source);
+            sourceWindow.document.close(); 
+            if(window.focus) sourceWindow.focus();
+        }  
 
-    
+		//This variable will hold the map, so I can zoom it in other methods and load the pin onto it
+		var map;
+		
+		function displayMap() {
+			//This variable holds the map properties (Google Maps defines what this must look like)
+			var mapProp= {
+			  center:new google.maps.LatLng(-36.8934912,174.8041728),
+			  zoom:16,
+			};
+			//Create the map and show it in the divMap div
+			map = new google.maps.Map(document.getElementById("divMap"),mapProp);
+			showZoom();
+		}
+	
+		function zoomIn(){
+			map.setZoom(map.getZoom()+1);
+			showZoom();
+		}
+		
+		function zoomOut(){
+			map.setZoom(map.getZoom()-1);
+			showZoom();
+		}
+		
+		function displayPin() {
+			//This variable holds the marker properties (Google Maps defines what this must look like)
+			//The marker definition contains a location and an icon
+			var marker = new google.maps.Marker({
+					position:new google.maps.LatLng(-36.910555286082634, 174.87601519824528),
+					icon:'images/bus40x40.png'
+				});
+			
+			//Show the marker
+			marker.setMap(map);
+		}
+		
+		function showZoom(){
+			document.getElementById("divZoom").innerHTML = "Zoom = " + map.getZoom().toString();
+		}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8eC68oituGsxoH7lZFc4xyZpV_AvhJkA&callback=displayMap"></script>
+
+
 </body>
 </html>
