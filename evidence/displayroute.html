@@ -32,6 +32,7 @@ I need to load a pre-created route onto the google map, along with pre-created p
 <a href="javascript:zoomIn();">Zoom In</a><br/>
 <a href="javascript:zoomOut();">Zoom Out</a><br/>
 <a href="javascript:showRoute();">Show Route</a><br/>
+<a href="javascript:showGoogleMarkers();">Show Google Markers</a><br/>
 <a href="javascript:viewSource();">View Source</a>
     <script>
       function viewSource(){;
@@ -61,8 +62,14 @@ I need to load a pre-created route onto the google map, along with pre-created p
 		}
 
 		function showRoute(){
-			var src = './kml/exampleroute.kml';
+			showKML('./kml/exampleroute.kml');
+		}
+		
+		function showGoogleMarkers(){
+			showKML('./kml/westcampus.kml');
+		}
 
+		function showKML(src){
 			//Load the route onto the map
 			//suppressInfoWindows: true means not to show a popup when the user clicks
 			//preserveViewport: false means that the map will scroll and zoom to fit the route
@@ -74,7 +81,8 @@ I need to load a pre-created route onto the google map, along with pre-created p
 				  map: map
 				});
 			alert ('done');
-		}
+		}		
+		
 		function zoomIn(){
 			map.setZoom(map.getZoom()+1);
 			showZoom();
