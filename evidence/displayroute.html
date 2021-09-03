@@ -61,13 +61,14 @@ I need to load a pre-created route onto the google map, along with pre-created p
 		}
 
 		function showRoute(){
+			//The path to the KML file has to be an absolute path
 			showKML('https://nathanieljsouth.github.io/Bus-Tracking/evidence/kml/exampleroute.kml');
 		}
 		
 		function showKML(src){
-			//Load the route onto the map
+			//Load the supplied KML file (containing the route and markers) onto the map
 			//suppressInfoWindows: true means not to show a popup when the user clicks
-			//preserveViewport: false means that the map will scroll and zoom to fit the route
+			//preserveViewport: false means that the map will scroll and zoom to fit the route in the centre of the map
 			var kmlLayer = new google.maps.KmlLayer(src, {
 				  suppressInfoWindows: true,
 				  preserveViewport: false,
