@@ -61,8 +61,7 @@ I need to load a pre-created route onto the google map, along with pre-created p
 			//Load the route onto the map
 			//suppressInfoWindows: true means not to show a popup when the user clicks
 			//preserveViewport: false means that the map will scroll and zoom to fit the route
-			var kmlLayer = new google.maps.KmlLayer('kml/exampleroute.kml', 
-				{
+			var kmlLayer = new google.maps.KmlLayer("./kml/exampleroute.kml", {
 				  suppressInfoWindows: true,
 				  preserveViewport: false,
 				  map: map
