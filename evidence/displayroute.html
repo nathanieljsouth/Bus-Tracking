@@ -31,6 +31,7 @@ I need to load a pre-created route onto the google map, along with pre-created p
 <div id="divZoom" style="margin: auto;padding: 10px;"></div>
 <a href="javascript:zoomIn();">Zoom In</a><br/>
 <a href="javascript:zoomOut();">Zoom Out</a><br/>
+<a href="javascript:showRoute();">Show Route</a><br/>
 <a href="javascript:viewSource();">View Source</a>
     <script>
       function viewSource(){;
@@ -57,19 +58,23 @@ I need to load a pre-created route onto the google map, along with pre-created p
 			//Create the map and show it in the divMap div
 			map = new google.maps.Map(document.getElementById("divMap"),mapProp);
 			showZoom();
-			
+		}
+
+		function showRoute(){
 			var src = './kml/exampleroute.kml';
 
 			//Load the route onto the map
 			//suppressInfoWindows: true means not to show a popup when the user clicks
 			//preserveViewport: false means that the map will scroll and zoom to fit the route
+
+			alert (src);
 			var kmlLayer = new google.maps.KmlLayer(src, {
 				  suppressInfoWindows: true,
 				  preserveViewport: false,
 				  map: map
 				});
+			alert ('done');
 		}
-	
 		function zoomIn(){
 			map.setZoom(map.getZoom()+1);
 			showZoom();
