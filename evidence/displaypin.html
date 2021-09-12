@@ -28,12 +28,15 @@ I need to find out how to display a marker on a Google Map in a certain location
 <p>
 As the bus needs to move, I need to be able to shift the location of the marker as well.
 </p>
+<p>
+I will be using markers for the bus stops as well, so I need to be able to respond when the user clicks a bus-stop to select it.  Try clicking the bus!
+</p>
 
 <div id="divMap" style="width:800px;height:400px;margin: auto;padding: 10px;"></div>
 <div id="divZoom" style="margin: auto;padding: 10px;"></div>
 <a href="javascript:zoomIn();">Zoom In</a></br>
 <a href="javascript:zoomOut();">Zoom Out</a></br>
-<a href="javascript:displayPin();">Display Pin</a></br>
+<a href="javascript:displayPin();">Display Pin (at St Kents)</a></br>
 <a href="javascript:movePin();">Move Pin</a></br>
 <a href="javascript:viewSource();">View Source</a>
     <script>
@@ -59,7 +62,7 @@ As the bus needs to move, I need to be able to shift the location of the marker 
 			//This variable holds the map properties (Google Maps defines what this must look like)
 			var mapProp= {
 			  center:new google.maps.LatLng(-36.8934912,174.8041728),
-			  zoom:16,
+			  zoom:14,
 			};
 			//Create the map and show it in the divMap div
 			map = new google.maps.Map(document.getElementById("divMap"),mapProp);
@@ -85,6 +88,11 @@ As the bus needs to move, I need to be able to shift the location of the marker 
 					icon:'images/busmarker.png'
 				});
 			
+			//Add an event listener to the marker - in the user app, this will select which bus-stop the user is interested in
+			google.maps.event.addListener(marker,'click',function() {
+				alert('You clicked the bus!');
+			});
+			
 			//Show the marker
 			marker.setMap(map);
 		}
@@ -94,6 +102,7 @@ As the bus needs to move, I need to be able to shift the location of the marker 
 			//Move the marker
 			marker.setPosition(new google.maps.LatLng(-36.8934912,174.8041728));
 		}
+		
 		
 		function showZoom(){
 			document.getElementById("divZoom").innerHTML = "Zoom = " + map.getZoom().toString();
