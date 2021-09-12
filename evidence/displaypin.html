@@ -62,7 +62,7 @@ I will be using markers for the bus stops as well, so I need to be able to respo
 			//This variable holds the map properties (Google Maps defines what this must look like)
 			var mapProp= {
 			  center:new google.maps.LatLng(-36.8934912,174.8041728),
-			  zoom:14,
+			  zoom:12,
 			};
 			//Create the map and show it in the divMap div
 			map = new google.maps.Map(document.getElementById("divMap"),mapProp);
@@ -92,7 +92,7 @@ I will be using markers for the bus stops as well, so I need to be able to respo
 			google.maps.event.addListener(marker,'click',function() {
 				alert('You clicked the bus!');
 			});
-			
+
 			//Show the marker
 			marker.setMap(map);
 		}

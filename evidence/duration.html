@@ -61,8 +61,10 @@
 
         function processRoutingResponse(routingResponse){
             console.log (routingResponse);
-
+            //Take the first result
+            alert (routingResponse.routes[0].legs[0].duration.text);
         }
+        
         //This function calculates the estimated travel time between two points
 		function calculateTime(){
 			//St Kents = -36.910555286082634, 174.87601519824528
