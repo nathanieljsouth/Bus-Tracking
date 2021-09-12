@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Tracking Project Evidence</title>
+    <link href="https://fonts.googleapis.com/css?family=Cardo|Oswald&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .flex-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .flex-container > div {
+          background-color: #6ad5cb;
+          width: 500px;
+          margin: 10px;
+          text-align: center;
+          line-height: 50px;
+          font-size: 30px;
+        }
+
+        .flex-container > div > span {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    
+<div class="navigation">
+    <ul>
+        <li>
+            <a href="index.html"><img class="navimage" width="90px" src="images/logo.png"></a>
+        </li>
+        <li>
+            <a class="navlink" href="index.html">Back to Menu</a>
+        </li>
+    </ul>
+</div>
+<h1>Javascript Cookie Usage</h1>
+
+<p>
+I need to find out how to store and read values from a cookie - I'm going to store the user's choice of bus route and bus-stop after they select them the first time.  THis will make subsequent visits to the app much faster for the user.
+</p>
+
+
+<div class="flex-container">
+    <div id="divResult"></div>
+</div>
+<a href="javascript:displayValue();">Read Value from Cookie</a><br/>
+<a href="javascript:writeValueAndDisplayResult();">Write Value to Cookie</a><br/>
+<a href="javascript:viewSource();">View Source</a>
+    <script>
+      function viewSource(){;
+            var source = "<html>";
+            source += document.getElementsByTagName('html')[0].innerHTML;
+            source += "</html>";
+            source = source.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            source = "<pre>"+source+"</pre>";
+            sourceWindow = window.open('','Source of page','height=800,width=800,scrollbars=1,resizable=1');
+            sourceWindow.document.write(source);
+            sourceWindow.document.close(); 
+            if(window.focus) sourceWindow.focus();
+        }  
+
+        //This function displays the value after getting it from the cookie
+        function displayValue(){
+            var cookieValue;
+            cookieValue = readCookieValue('theCookieValue');
+            showResultWithNewline(cookieValue);
+        }
+
+        //This function writes to the cookie and then displays that the value has been written
+        function writeValueAndDisplayResult(){
+            writeCookieValue('theCookieValue', Date(), 365);
+            showResultWithNewline('Current time written to the cookie');
+        }
+
+        //This function reads the value from the cookie
+        function readCookieValue(cookieName){
+            //All the cookies are returned as a string of key=value pairs.
+            //Need to load the cookie string in and then split it into an array, and then find the element that matches the cookieName
+            var cookieArr = document.cookie.split(";");
+    
+            // Loop through the array elements
+            for(var i = 0; i < cookieArr.length; i++) {
+                var cookiePair = cookieArr[i].split("=");
+                
+                /* Removing whitespace at the beginning of the cookie name
+                and compare it with the given string */
+                if(cookiePair[0].trim() == cookieName) {
+                    // Decode the cookie value and return
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+    
+            // Return null if not found
+            return null;
+        }
+
+        //This function writes the value to the cookie
+        function writeCookieValue(cookieName, cookieValue, cookieDaysToExpire){
+
+            //Set up the expiry date for the cookie value
+            var expiryDate = new Date();
+            expiryDate.setTime(expiryDate.getTime() + (cookieDaysToExpire * 24 * 60 * 60 * 1000));
+            
+            var expiryDateString = "expires=" + expiryDate.toUTCString();
+
+            //we have to encode the value to make sure it can be safely stored in a cookie
+            document.cookie = cookieName + "=" + encodeURIComponent(cookieValue) + ";path=/";
+
+        }
+    
+        //This function adds the supplied string to the end of what's already in the div
+        function showResultWithNewline(TextToShow) {
+            document.getElementById("divResult").innerHTML += TextToShow + "<br/>";
+        }
+
+
+    </script>
+    </body>
+</html>

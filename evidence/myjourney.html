@@ -43,7 +43,7 @@
 
 <p>I was really surprised to find that Google Maps requires absolute paths to KML files rather than relative ones.  This caused me a lot of google searching and trial-and-error debugging to understand the reason my routes weren't loading.</p>
     
-<p>After loading my KML route onto the Google Map I wanted to be able to change the appearance of the busstop marker the user has selected.  However, Google Maps doesn't let me alter a marker like this so I won't include that piece of functionality in this version.</p>
+<p>After loading my KML route onto the Google Map I wanted to be able to change the appearance of the busstop marker the user has selected.  However, Google Maps doesn't let me alter a marker loaded as part of a KML layer, so I'm going to change to create thebus-stop markers.  This means I'll need to add the latitude and longitude of each bus-stop to the JSON data file.</p>
     
 
 </body>
