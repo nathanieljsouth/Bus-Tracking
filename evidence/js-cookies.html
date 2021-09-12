@@ -54,6 +54,7 @@ I need to find out how to store and read values from a cookie - I'm going to sto
 </div>
 <a href="javascript:displayValue();">Read Value from Cookie</a><br/>
 <a href="javascript:writeValueAndDisplayResult();">Write Value to Cookie</a><br/>
+<a href="javascript:deleteValueAndDisplayResult();">Delete Value from Cookie</a><br/>
 <a href="javascript:viewSource();">View Source</a>
     <script>
       function viewSource(){;
@@ -81,6 +82,10 @@ I need to find out how to store and read values from a cookie - I'm going to sto
             showResultWithNewline('Current time written to the cookie');
         }
 
+        function deleteValueAndDisplayResult(){
+            deleteCookieValue('theCookieValue');
+            showResultWithNewline('Cookie value deleted');
+        }
         //This function reads the value from the cookie
         function readCookieValue(cookieName){
             //All the cookies are returned as a string of key=value pairs.
@@ -113,10 +118,17 @@ I need to find out how to store and read values from a cookie - I'm going to sto
             var expiryDateString = "expires=" + expiryDate.toUTCString();
 
             //we have to encode the value to make sure it can be safely stored in a cookie
-            document.cookie = cookieName + "=" + encodeURIComponent(cookieValue) + ";path=/";
+            document.cookie = cookieName + "=" + encodeURIComponent(cookieValue) + ";" + expiryDateString + ";path=/";
 
         }
     
+        //This function deletes the value from the cookie
+        function deleteCookieValue(cookieName){
+            //To delete the cookie all we have to do is write the cookie (using a blank value) and set the expiry days to a negative number so it's expired already
+            writeCookieValue(cookieName,"",-1);
+
+        }
+        
         //This function adds the supplied string to the end of what's already in the div
         function showResultWithNewline(TextToShow) {
             document.getElementById("divResult").innerHTML += TextToShow + "<br/>";
