@@ -44,7 +44,17 @@
         function processRoutingResponse(routingResponse){
             console.log (routingResponse);
             //Take the first result
+
+            //The duration.text is the time in words (e.g. 20 mins)
             alert ('The driving time is ' + routingResponse.routes[0].legs[0].duration.text);
+
+            //The duration.value is the time in seconds
+            var durationSeconds = parseInt(routingResponse.routes[0].legs[0].duration.value);
+
+            //Add the number of seconds to the current time to get the ETA
+            var arrivalTime = new Date()
+            arrivalTime.setSeconds(arrivalTime.getSeconds() + durationSeconds);
+            alert ('The ETA is ' + arrivalTime.toString());
         }
         
         //This function calculates the estimated travel time between two points
