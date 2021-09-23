@@ -59,8 +59,7 @@ I need to find out how to detect the location clicked on a Google Map, centred. 
 
             //Set up the event listener that will fire when clicked
             map.addListener("click", (mapsMouseEvent) => {
-                alert(JSON.stringify(mapsMouseEvent));
-                alert("Location is " + mapsMouseEvent.latLng.latitude + ", " +  mapsMouseEvent.latLng.longitude);
+                alert("Location is " + mapsMouseEvent.lat.lat + ", " +  mapsMouseEvent.latLng.lng);
             });
 		}
 	
