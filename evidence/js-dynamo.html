@@ -21,10 +21,135 @@
         </li>
     </ul>
 </div>
-<h1>How to conjointly use Javascript and Dynamo DB</h1>
+<h1>Javascript and AWS Dynamo DB</h1>
 
+<p>
+I am going to be storing bus location data in AWS Dynamo DB so I need to be able to read and write data to Dynamo.  I also need to be able to figure out how old a specific piece of data is, so I've included this in the 'read location' example below.
+</p>
 
+<div class="flex-container">
+    <div id="divResult"></div>
+</div>
+<div id="divError"></div>
+<br/>
+<br/>
+<br/>
+<a href="javascript:writeBusLocation ('r17', '-36.123456', '123.123456');">Set bus location to first location</a><br/>
+<a href="javascript:writeBusLocation ('r17', '-35.987654', '100.987654');">Set bus location to second location</a><br/>
+<a href="javascript:readBusLocation ('r17');">Read and display bus location and age of data</a><br/>
+<a href="javascript:viewSource();">View Source</a>
 
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+<script>
+    //Set up the AWS configuration providing keys for access
+    AWS.config.update({
+        region: "us-east-1",
+        //Look into changing from keys to cognito
+        accessKeyId: "AKIA5S3RBBSJHVYCIEJE",
+        secretAccessKey: "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"
+        });
+
+        /* 
+            Uncomment the following code to configure Amazon Cognito and make sure to 
+            remove the endpoint, accessKeyId and secretAccessKey specified in the code above. 
+            Make sure Cognito is available in the DynamoDB web service region (specified above).
+            Finally, modify the IdentityPoolId and the RoleArn with your own.
+        */
+        /*
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: "us-west-2:12345678-1ab2-123a-1234-a12345ab12",
+        RoleArn: "arn:aws:iam::123456789012:role/dynamocognito"
+        });
+        */
+
+        //Set up the variables that we will use to access DynamoDB
+        var dynamodb = new AWS.DynamoDB();
+        var docClient = new AWS.DynamoDB.DocumentClient();
+
+        //This function writes the bus location (bus route, latitude and longitude) to DynamoDB
+        function writeBusLocation(route, lat, lng) {
+            //Set up the parameters for DynamoDB (AWS defines the format)
+            var params = {
+                TableName :"BusLocations", //This table has been set up in AWS
+                Item:{
+                    "RouteId": route, //The RouteId has been set up in AWS as the primary key so it must exist.
+                    "latitude": lat,
+                    "longitude": lng,
+                    "timestamp": new Date().toISOString() //The ISO Date format is safe to use in any timezone
+                    }
+                };
+
+            //Use the docClient to write the data to Dynamo.  After the write is complete, the inline function is called.  This is asynchronous.
+            docClient.put(params, function(err, data) {
+                if (err) {
+                    showError ("Error: " + "\n" + JSON.stringify(err, undefined, 2)); //The stringify parameters make the JSON look pretty!
+                } else {
+                    showResultWithNewline ("Data written successfully");
+                }
+            });
+        }
+
+        //This function reads the bus location (latitude, longitude and the timestamp) from DynamoDB
+        function readBusLocation(route) {
+            //Set up the parameters for DynamoDB (AWS defines the format)
+            var params = {
+                TableName: "BusLocations",
+                Key:{
+                    "RouteId": route //as we are reading, we only specify the RouteId (there is only one location stored per route)
+                }
+            };
+
+            //Use the docClient to read the data.  After the write is complete, the inline function is called.  This is asynchronous.
+            docClient.get(params, function(err, data) {
+                if (err) {
+                    displayResult ("Error: " + "\n" + JSON.stringify(err, undefined, 2));
+                } else {
+                    //Work out how old the data is
+                    var busLocationAge = calculateTimeSinceDate(data.Item.timestamp);
+
+                    showResultWithNewline (JSON.stringify(data, undefined, 2));
+                    showResultWithNewline ("The data is " + busLocationAge.Seconds + " seconds old");
+                    showResultWithNewline ("The data is " + busLocationAge.Minutes + " minutes old");
+                }
+            });
+        }
+
+        //This function calculates how old, in seconds and minutes, a specific timestamp is
+        function calculateTimeSinceDate(dateToCalculate){
+            var currentDate = new Date();
+            var oldDate = new Date(dateToCalculate);
+            var dateDifference = currentDate.getTime() - oldDate.getTime(); //This gives the age in milliseconds
+
+            //Return an object with the difference in minutes and seconds
+            return {
+                Seconds: Math.round(dateDifference / 1000),
+                Minutes: Math.floor(dateDifference / 1000 / 60) //Round this down as we want to see 0 minutes old for the first minute
+            }
+
+        }
+
+      function viewSource(){;
+            var source = "<html>";
+            source += document.getElementsByTagName('html')[0].innerHTML;
+            source += "</html>";
+            source = source.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            source = "<pre>"+source+"</pre>";
+            sourceWindow = window.open('','Source of page','height=800,width=800,scrollbars=1,resizable=1');
+            sourceWindow.document.write(source);
+            sourceWindow.document.close(); 
+            if(window.focus) sourceWindow.focus();
+        }  
+
+    //This function adds the supplied string to the end of what's already in the div
+    function showResultWithNewline(TextToShow) {
+      document.getElementById("divResult").innerHTML += TextToShow + "<br/>";
+    }
+
+    //This function shows the error 
+	function showError(ErrorToShow){
+		document.getElementById('divError').innerHTML=ErrorToShow;
+	};
     
-</body>
+</script>
+    </body>
 </html>
