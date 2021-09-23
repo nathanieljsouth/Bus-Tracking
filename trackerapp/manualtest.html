@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Tracking - Manual Tester</title>
+    <link href="https://fonts.googleapis.com/css?family=Cardo|Oswald&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    
+<div class="navigation">
+    <ul>
+        <li>
+            <a href="index.html"><img class="navimage" width="90px" src="images/logo.png"></a>
+        </li>
+        <li>
+            <a class="navlink" href="index.html">Back to Menu</a>
+        </li>
+    </ul>
+</div>
+<h1>Manual Bus Location</h1>
+<p>
+Chose a bus route and click the map to set the bus location.
+</p>
+<p>
+THIS WILL OVERWRITE LIVE DATA!!!  BE CAREFUL!!!
+</p>
+
+<select id="drpBus">
+    <option value="r17">Route 17</option>
+    <option value="r18">Route 18</option>
+    <option value="r20">Route 20</option>
+</select>
+<br/>
+<div id="divMap" style="width:800px;height:400px;margin: auto;padding: 10px;"></div>
+<div id="divZoom" style="margin: auto;padding: 10px;"></div>
+<div class="flex-container">
+    <div id="divResult"></div>
+</div>
+<div id="divError"></div>
+
+<a href="javascript:zoomIn();">Zoom In</a><br/>
+<a href="javascript:zoomOut();">Zoom Out</a><br/>
+<a href="javascript:viewSource();">View Source</a>
+    <script>
+      function viewSource(){;
+            var source = "<html>";
+            source += document.getElementsByTagName('html')[0].innerHTML;
+            source += "</html>";
+            source = source.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            source = "<pre>"+source+"</pre>";
+            sourceWindow = window.open('','Source of page','height=800,width=800,scrollbars=1,resizable=1');
+            sourceWindow.document.write(source);
+            sourceWindow.document.close(); 
+            if(window.focus) sourceWindow.focus();
+        }  
+
+		//This variable will hold the map, so I can zoom it in other methods
+		var map;
+		
+		function displayMap() {
+			//This variable holds the map properties (Google Maps defines what this must look like)
+			var mapProp= {
+			  center:new google.maps.LatLng(-36.8934912,174.8041728),
+			  zoom:16,
+			};
+			//Create the map and show it in the divMap div
+			map = new google.maps.Map(document.getElementById("divMap"),mapProp);
+			showZoom();
+
+            //Set up the event listener that will fire when clicked
+            map.addListener("click", (mapsMouseEvent) => {
+                //The latLng object has two 'getter' functions called lat() and lng()
+                var selectedLat = mapsMouseEvent.latLng.lat();
+                var selectedLng = mapsMouseEvent.latLng.lng();
+
+                //Get the selected bus route
+                var selectedBus = document.getElementById("drpBus").value;
+
+                //Save the bus location
+                writeBusLocation (selectedRoute, selectedLat, selectedLng);
+            });
+		}
+
+        //This function writes the bus location (bus route, latitude and longitude) to DynamoDB
+        function writeBusLocation(route, lat, lng) {
+            //Set up the parameters for DynamoDB (AWS defines the format)
+            var params = {
+                TableName :"BusLocations", //This table has been set up in AWS
+                Item:{
+                    "RouteId": route, //The RouteId has been set up in AWS as the primary key so it must exist.
+                    "latitude": lat,
+                    "longitude": lng,
+                    "timestamp": new Date().toISOString() //The ISO Date format is safe to use in any timezone
+                    }
+                };
+
+            //Use the docClient to write the data to Dynamo.  After the write is complete, the inline function is called.  This is asynchronous.
+            docClient.put(params, function(err, data) {
+                if (err) {
+                    showError ("Error: " + "\n" + JSON.stringify(err, undefined, 2)); //The stringify parameters make the JSON look pretty!
+                } else {
+                    showResultWithNewline ("Data written successfully");
+                }
+            });
+        }
+
+		function zoomIn(){
+			map.setZoom(map.getZoom()+1);
+			showZoom();
+		}
+		
+		function zoomOut(){
+			map.setZoom(map.getZoom()-1);
+			showZoom();
+		}
+		
+		function showZoom(){
+			document.getElementById("divZoom").innerHTML = "Zoom = " + map.getZoom().toString();
+		}
+
+        //This function adds the supplied string to the end of what's already in the div
+        function showResultWithNewline(TextToShow) {
+            document.getElementById("divResult").innerHTML += TextToShow + "<br/>";
+        } 
+
+        //This function shows the error 
+        function showError(ErrorToShow){
+            document.getElementById('divError').innerHTML=ErrorToShow;
+        };        
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8eC68oituGsxoH7lZFc4xyZpV_AvhJkA&callback=displayMap"></script>
+
+
+</body>
+</html>
