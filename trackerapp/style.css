@@ -45,54 +45,10 @@ input {
     color: black;
 }
 
-textarea {
+select {
     color: black;
 }
 
-.ToDoTitle {
-    color: black;
-}
-
-.ToDoDate{
-    color: gray
-}
-
-.form{
-    margin: 0 auto;
-    width: 350px;
-}
-
-.form label{
-		display: inline-block;
-		text-align: right;
-		float: left;
-	}
-
-.form input{
-		display: inline-block;
-		text-align: left;
-		float: right;
-    width: 250px;
-	}
-
-.form textarea{
-		display: inline-block;
-		text-align: left;
-		float: right;
-    width: 250px;
-	}
-
-.form .cancel{
-    display: inline-block;
-    text-align: right;
-    float: left;
-}
-
-.form .save{
-    display: inline-block;
-    text-align: left;
-    float: right;
-}
 
 .message{
     color: red;
@@ -101,14 +57,4 @@ textarea {
 
 .title{
     font-size: 30pt;
-}
-
-.duedate{
-    font-size: 20pt;
-    color:lightgray
-}
-
-.description{
-    font-size: 20pt;
-    color:lightgray
 }
