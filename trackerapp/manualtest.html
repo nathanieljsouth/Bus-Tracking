@@ -104,6 +104,9 @@ THIS WILL OVERWRITE LIVE DATA!!!  BE CAREFUL!!!
                 //Show the bus marker on the map
                 displayBusMarker(selectedLat, selectedLng);
             });
+
+            //Show the location of the first bus route (as it will be selected already in the dropdown)
+            readBusLocation();
 		}
 
         //This  function reads the bus location from the DB and sets the bus marker to that location
