@@ -44,4 +44,10 @@ img:hover {
 
 select {
     color: black;
+    
+}
+
+select option {
+    color: black;
+    
 }
