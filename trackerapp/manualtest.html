@@ -121,11 +121,9 @@ THIS WILL OVERWRITE LIVE DATA!!!  BE CAREFUL!!!
                 if (err) {
                     showError ("Error: " + "\n" + JSON.stringify(err, undefined, 2));
                 } else {
-                    console.log(data);
-
+                    displayBusMarker(data.Item.latitude,data.Item.longitude);
                 }
             });
-
         }
 
         //This function writes the bus location (bus route, latitude and longitude) to DynamoDB
