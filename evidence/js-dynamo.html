@@ -42,25 +42,17 @@ I am going to be storing bus location data in AWS Dynamo DB so I need to be able
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
 <script>
     //Set up the AWS configuration providing keys for access
+    
     AWS.config.update({
-        region: "us-east-1",
-        //Look into changing from keys to cognito
-        accessKeyId: "AKIA5S3RBBSJHVYCIEJE",
-        secretAccessKey: "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"
-        });
+        region: "us-east-1" });
 
-        /* 
-            Uncomment the following code to configure Amazon Cognito and make sure to 
-            remove the endpoint, accessKeyId and secretAccessKey specified in the code above. 
-            Make sure Cognito is available in the DynamoDB web service region (specified above).
-            Finally, modify the IdentityPoolId and the RoleArn with your own.
-        */
-        /*
+
+        //Set up the AWS Cognito credentials - these are used instead to safely store the user details in a public webpage
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: "us-west-2:12345678-1ab2-123a-1234-a12345ab12",
-        RoleArn: "arn:aws:iam::123456789012:role/dynamocognito"
+        IdentityPoolId: "us-east-1:ebd9002f-af23-412c-96af-20182c4d7c6a",
+        RoleArn: "arn:aws:iam::933855562898:role/Cognito_BusIdentityPoolUnauth_Role"
         });
-        */
+        
 
         //Set up the variables that we will use to access DynamoDB
         var dynamodb = new AWS.DynamoDB();
