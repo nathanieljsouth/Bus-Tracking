@@ -41,3 +41,7 @@ img:hover {
   box-shadow: 0 0 5px 5px #6ad5cb;
 }
 
+
+select {
+    color: black;
+}
