@@ -29,7 +29,7 @@ Chose a bus route and click the map to set the bus location.
 THIS WILL OVERWRITE LIVE DATA!!!  BE CAREFUL!!!
 </p>
 
-<select id="drpBus">
+<select id="drpBus" onchange="javascript:readBusLocation();">
     <option value="r17">Route 17</option>
     <option value="r18">Route 18</option>
     <option value="r20">Route 20</option>
@@ -106,6 +106,27 @@ THIS WILL OVERWRITE LIVE DATA!!!  BE CAREFUL!!!
             });
 		}
 
+        //This  function reads the bus location from the DB and sets the bus marker to that location
+        function readBusLocation(){
+            //Set up the parameters for DynamoDB (AWS defines the format)
+            var params = {
+                TableName: "BusLocations",
+                Key:{
+                    "RouteId": document.getElementById("drpBus").value //as we are reading, we only specify the RouteId (there is only one location stored per route)
+                }
+            };
+
+            //Use the docClient to read the data.  After the write is complete, the inline function is called.  This is asynchronous.
+            docClient.get(params, function(err, data) {
+                if (err) {
+                    showError ("Error: " + "\n" + JSON.stringify(err, undefined, 2));
+                } else {
+                    console.log(data);
+
+                }
+            });
+
+        }
 
         //This function writes the bus location (bus route, latitude and longitude) to DynamoDB
         function writeBusLocation(route, lat, lng) {
