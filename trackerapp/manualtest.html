@@ -61,6 +61,8 @@ THIS WILL OVERWRITE LIVE DATA!!!  BE CAREFUL!!!
 		//This variable will hold the map, so I can zoom it in other methods
 		var map;
 		
+        //This variable will hold the bus marker, so I can move it when the user clicks on the map
+        var marker;
 
         AWS.config.update({
         region: "us-east-1" });
@@ -129,14 +131,20 @@ THIS WILL OVERWRITE LIVE DATA!!!  BE CAREFUL!!!
         }
 
         //This function displays the bus marker on the map
-        function displayBusMarker( lat, lng) {
-            marker = new google.maps.Marker({
+        function displayBusMarker(lat, lng) {
+            //Have we already created the marker?
+            if (!marker) {
+                //Create the marker and add it to the map in the correct place
+                marker = new google.maps.Marker({
 					position:new google.maps.LatLng(lat, lng),
 					icon:'images/busmarker.png'
 				});
-
-            //Show the marker
-            marker.setMap(map);                
+                //Show the marker
+                marker.setMap(map);  
+            } else {
+                //The marker is already set up, so just move it
+                marker.setPosition(new google.maps.LatLng(lat, lng));
+            }
         }
 
 		function zoomIn(){
