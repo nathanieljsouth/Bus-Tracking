@@ -80,11 +80,9 @@
         //It will be called when the Google Maps script loads right at the bottom of this page
 		function displayMap() {
 			//This variable holds the map properties (Google Maps defines what this must look like)
-			var mapProp= {
-			  //We won't set a centre for the map so the map centres on the user's location automatically
-              //We'll set the centre later when a route is chosen
-              //center:new google.maps.LatLng(-36.8934912,174.8041728),
-			  zoom:16
+            var mapProp= {
+			  center:new google.maps.LatLng(-36.8934912,174.8041728),
+			  zoom:16,
 			};
 
 			//Create the map and show it in the divMap div
