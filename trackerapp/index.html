@@ -24,6 +24,7 @@
     <div id="divResult" class="success"></div>
     <div id="divError" class="error"></div>
 </div>
+
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
     <script>
 
@@ -42,7 +43,6 @@
         var docClient = new AWS.DynamoDB.DocumentClient();
 
         //This variable will hold the bus route - it's taken from the querystring so it can be easily set up as a shortcut on a mobile phone
-        //If no route is supplied then we tell the user and don't start the location update timer
         var busRoute = window.location.search;
         
         //The search property contains the ? character so we need to get rid of it - also get rid of any spaces at the end of the querystring
@@ -50,7 +50,7 @@
 
         //if no bus route was supplied tell the user and exit
         if(busRoute==""){
-            showError ("Please supply a bus route identifier on the querystring");
+            showError ("Please supply a bus route on the querystring");
         } else {
             //We have been given a route, so start tracking (note that any route identifier will do as this makes adding a enw route really easy)
 
@@ -63,18 +63,20 @@
                 startTimer();
             }
             else { 
+                //This browser can't be used for the app
                 showError ("GPS is not supported by this browser - it cannot be used for the bus tracker app");
             }
         };        
 
-        //This function starts the timer - when the timer fires we will record the location of the bus
+        //This function starts the timer - each time the timer fires we will record the location of the bus
         function startTimer(){
             //Start the timer off - we will be recording the location every 10 seconds (10000 milliseconds)
             setTimeout(getAndRecordLocation, 10000);
         }
 
+        //This function asks the browser for the current location and provides two callback functions
         function getAndRecordLocation(){
-            //Get the location - this will callback to the function that saves the location or shows the error
+            //Get the location - we provide two callback functions, one to save the location and one to handle any error
             navigator.geolocation.getCurrentPosition(recordGPSLocation, displayGPSError);
 
             //Start the timer again - we do this here because we want to start the timer again even if we failed to save the location once for any reason
@@ -94,7 +96,7 @@
                     }
                 };
 
-            //Use the docClient to write the data to Dynamo.  After the write is complete, the inline function is called.  This is asynchronous.
+            //Use the AWS docClient object to write the data to Dynamo.  After the write is complete, the inline function is called.  This is asynchronous.
             docClient.put(params, function(err, data) {
                 if (err) {
                     showError ("Save Error: " + "\n" + JSON.stringify(err, undefined, 2)); //The stringify parameters make the JSON look pretty!
@@ -112,19 +114,22 @@
             });
         }
 
+        //This function is called if an error occurs while getting the GPS location
         function displayGPSError(error){
+
+            //Check what error code is returned and then display an appropriate message
             if (error.code==1){
-                showError("Access to location denied by user");
+                showError("Access to location denied - Please allow access to GPS location");
                 }
             else if (error.code==2){
-                showError("Location unavailable");
+                showError("Location unavailable - This error may resolve itself");
                 }
             else if (error.code==3){
-                showError("Timeout while trying to get location");
+                showError("Timeout while trying to get location - This error may resolve itself");
                 }
         }        
 
-        //This function shows the supplied string, replacing what was in the status before, including the current time
+        //This function shows the supplied text including the current time
         function showResults(TextToShow) {
             document.getElementById("divResult").innerHTML = new Date() + "<br/>" +  TextToShow;
         } 
