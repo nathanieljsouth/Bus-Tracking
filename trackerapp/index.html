@@ -131,12 +131,12 @@
 
         //This function shows the supplied text including the current time
         function showResults(TextToShow) {
-            document.getElementById("divResult").innerHTML = new Date() + "<br/>" +  TextToShow;
+            document.getElementById("divResult").innerHTML = new Date().toLocaleString() + "<br/>" +  TextToShow;
         } 
 
         //This function shows the error with the current time so the user knows when the error happened
         function showError(ErrorToShow){
-            document.getElementById("divError").innerHTML = new Date() + "<br/>" +  ErrorToShow;
+            document.getElementById("divError").innerHTML = new Date().toLocaleString() + "<br/>" +  ErrorToShow;
         };        
 </script>
 </body>
