@@ -61,7 +61,7 @@
                 //The getCurrentPositon method takes a callback function as a parameter for success and also one for error
                 navigator.geolocation.getCurrentPosition(recordGPSLocation, displayGPSError);
             } else { 
-                showResultWithNewline ("Geolocation is not supported by this browser.");
+                showError ("Geolocation is not supported by this browser.");
             }
         }
 
