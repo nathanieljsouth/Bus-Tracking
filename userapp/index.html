@@ -112,8 +112,8 @@
 		
             for (routeCounter in busRoutesAndStops.busroutes){
                 var theDropdownOption = document.createElement("option");
-                theDropdownOption.text = busdata.busroutes[routeCounter].name;
-                theDropdownOption.value = busdata.busroutes[routeCounter].id;
+                theDropdownOption.text = busRoutesAndStops.busroutes[routeCounter].name;
+                theDropdownOption.value = busRoutesAndStops.busroutes[routeCounter].id;
                 theDropdown.add(theDropdownOption);
             }
         }        
