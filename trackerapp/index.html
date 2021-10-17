@@ -4,23 +4,135 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bus Tracker</title>
+    <title>Bus Tracking - Manual Tester</title>
     <link href="https://fonts.googleapis.com/css?family=Cardo|Oswald&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    
 </head>
 
 <body>
-    <div class="navigation">
-        <ul>
-            <li>
-                <a href="index.html"><img class="navimage" title="Bus Tracker" width="90px" src="images/logo.png"></a>
-            </li>
-        </ul>
-    </div>
+    
+<div class="navigation">
+    <ul>
+        <li>
+            Bus Tracker App
+        </li>
+    </ul>
+</div>
+<h1>Bus Tracker App</h1>
+<div class="flex-container">
+    <div id="divBusRoute"></div>
+    <div id="divResult"></div>
+</div>
+<div id="divError"></div>
 
-	<p class="sectionheader">Placeholder for the bus tracker app</p>
-    
-    
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+    <script>
+
+        //Set up the AWS Dynamo region to use
+        AWS.config.update({
+        region: "us-east-1" });
+
+        //Set up the AWS Cognito credentials - these are used to safely store logon details in a public webpage
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: "us-east-1:ebd9002f-af23-412c-96af-20182c4d7c6a",
+        RoleArn: "arn:aws:iam::933855562898:role/Cognito_BusIdentityPoolUnauth_Role"
+        });
+
+        //Set up the variables that we will use to access DynamoDB
+        var dynamodb = new AWS.DynamoDB();
+        var docClient = new AWS.DynamoDB.DocumentClient();
+
+        //This variable will hold the bus route - it's taken from the querystring so it can be easily set up as a shortcut on a mobile phone
+        //If no route is supplied then we tell the user and don't start the location update timer
+        var busRoute = window.location.search;
+        
+        //The search property contains the ? character so we need to get rid of it - also get rid of any spaces at the end of the querystring
+        busRoute = busRoute.replace("?","").trim();
+
+        //if no bus route was supplied tell the user and exit
+        if(busRoute=""){
+            showError ("Please supply a bus route identifier on the querystring");
+        } else {
+            //We have been given a route, so start tracking (note that any route identifier will do as this makes adding a enw route really easy)
+
+            //Display the route we're tracking
+            document.getElementById("divBusRoute").innerHTML = "Tracking for route: " + busRoute;
+
+            //Start the timer off - we will be recording the location every 30 seconds (30000 milliseconds)
+            setTimeout(getAndRecordLocation, 30000);
+        };        
+
+        function getAndRecordLocation(){
+            //Get the location - this will callback to the function that saves the location or shows the error
+            if (navigator.geolocation) {
+                //The getCurrentPositon method takes a callback function as a parameter for success and also one for error
+                navigator.geolocation.getCurrentPosition(recordGPSLocation, displayGPSError);
+            } else { 
+                showResultWithNewline ("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function displayGPSError(error){
+            if (error.code==1){
+                showError(new Date() + ": Access to location denied by user");
+                }
+            else if (error.code==2){
+                showError(new Date() + ": Location unavailable");
+                }
+            else if (error.code==3){
+                showError(new Date() + ": Timeout while trying to get location");
+                }
+        }
+
+		function recordGPSLocation(position) {
+            //Save the location
+            writeBusLocation (busRoute, position.coords.latitude, position.coords.longitude);
+		}
+
+        //This function writes the bus location (bus route, latitude and longitude) to DynamoDB
+        function writeBusLocation(route, lat, lng) {
+            //Set up the parameters for DynamoDB (AWS defines the format)
+            var params = {
+                TableName :"BusLocations", //This table has been set up in AWS
+                Item:{
+                    "RouteId": route, //The RouteId has been set up in AWS as the primary key so it must exist.
+                    "latitude": lat,
+                    "longitude": lng,
+                    "timestamp": new Date().toISOString() //The ISO Date format is safe to use in any timezone
+                    }
+                };
+
+            //Use the docClient to write the data to Dynamo.  After the write is complete, the inline function is called.  This is asynchronous.
+            docClient.put(params, function(err, data) {
+                if (err) {
+                    showError ("Error: " + "\n" + JSON.stringify(err, undefined, 2)); //The stringify parameters make the JSON look pretty!
+                } else {
+                    //Display the location and the current local time so the user can see when the location was updated
+                    showResults(
+                        "Timestamp: " + new Date() 
+                        + "<br/>" 
+                        + "Lat: " + position.coords.latitude
+                        + "<br/>" 
+                        + "Lng: " + position.coords.longitude
+                        );
+                }
+            });
+        }
+
+        //This function adds the supplied string to the end of what's already in the div
+        function showResultWithNewline(TextToShow) {
+            document.getElementById("divResult").innerHTML += TextToShow + "<br/>";
+        } 
+
+        //This function shows the supplied string, replacing what was in the status before
+        function showResults(TextToShow) {
+            document.getElementById("divResult").innerHTML = TextToShow;
+        } 
+
+        //This function shows the error 
+        function showError(ErrorToShow){
+            document.getElementById('divError').innerHTML=ErrorToShow;
+        };        
+</script>
 </body>
 </html>
