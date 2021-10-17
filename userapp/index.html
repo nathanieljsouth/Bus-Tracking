@@ -190,17 +190,17 @@
         function displayBusMarker() {
             //Have we already created the marker?
             //If we haven't created it then the following line will be true
-            if (!marker) {
+            if (!busMarker) {
                 //Create the marker and set its position to the correct place, and set the icon we want to use
-                marker = new google.maps.Marker({
+                busMarker = new google.maps.Marker({
 					position:new google.maps.LatLng(busLatitude, busLongitude),
 					icon:'images/busmarker.png'
 				});
                 //Show the marker
-                marker.setMap(map);  
+                busMarker.setMap(map);  
             } else {
                 //The marker is already set up, so we can just move it
-                marker.setPosition(new google.maps.LatLng(busLatitude, busLongitude));
+                busMarker.setPosition(new google.maps.LatLng(busLatitude, busLongitude));
             }
         }
 
