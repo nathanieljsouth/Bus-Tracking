@@ -118,6 +118,9 @@
 
             //Select the first route
             routeSelected();
+
+            //Set the timer up to show the bus location - we do this every 20 seconds so the ETA calculation every 30 seconds has new data
+            setInterval(readBusLocation,20000);
         }        
 
         //This function runs whenever the route is changed
@@ -152,9 +155,7 @@
         function calculateETA(){
             //Get and display the ETA
             //TODO
-            
-            //Set the timer to update the info in 30 seconds
-            setTimeout(calculateETA,30000);
+
         }
         
         //This function reads the bus location from the DB and sets the bus marker to that location
@@ -179,11 +180,11 @@
                     
                     //Display the location on the map
                     displayBusMarker();
+
+                    //Display the ETA
+                    //TODO 
                 }
             });
-
-            //Set the timer up to show the bus location - we do this every 20 seconds so the ETA calculation every 30 seconds has new data
-            setTimeout(readBusLocation,20000);
         }
 
         //This function displays the bus marker on the map
