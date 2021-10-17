@@ -65,6 +65,6 @@ select option {
 }
 
 .success{
-    color: green;
+    color: lime;
     font-size: 20pt;
 }
