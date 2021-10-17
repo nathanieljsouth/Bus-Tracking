@@ -58,3 +58,8 @@ select option {
 .title{
     font-size: 30pt;
 }
+
+.busRoute{
+    color: yellow;
+    font-size: 20pt;
+}
