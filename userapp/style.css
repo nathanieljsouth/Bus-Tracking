@@ -41,74 +41,30 @@ img:hover {
   box-shadow: 0 0 5px 5px #6ad5cb;
 }
 
-input {
+select {
     color: black;
 }
 
-textarea {
+select option {
     color: black;
-}
-
-.ToDoTitle {
-    color: black;
-}
-
-.ToDoDate{
-    color: gray
-}
-
-.form{
-    margin: 0 auto;
-    width: 350px;
-}
-
-.form label{
-		display: inline-block;
-		text-align: right;
-		float: left;
-	}
-
-.form input{
-		display: inline-block;
-		text-align: left;
-		float: right;
-    width: 250px;
-	}
-
-.form textarea{
-		display: inline-block;
-		text-align: left;
-		float: right;
-    width: 250px;
-	}
-
-.form .cancel{
-    display: inline-block;
-    text-align: right;
-    float: left;
-}
-
-.form .save{
-    display: inline-block;
-    text-align: left;
-    float: right;
-}
-
-.message{
-    color: red;
     
+}
+
+.error{
+    color: red;
+    font-size: 20pt;
 }
 
 .title{
     font-size: 30pt;
 }
 
-.duedate{
+.busRoute{
+    color: yellow;
     font-size: 20pt;
-    color:lightgray
 }
 
-.description{
+.success{
+    color: lime;
     font-size: 20pt;
-    color:lightgray
 }

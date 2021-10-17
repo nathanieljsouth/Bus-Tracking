@@ -4,23 +4,233 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bus Tracker - User App</title>
+    <title>Bus Arrival Time App</title>
     <link href="https://fonts.googleapis.com/css?family=Cardo|Oswald&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    
 </head>
 
 <body>
-    <div class="navigation">
-        <ul>
-            <li>
-                <a href="index.html"><img class="navimage" title="Bus Tracker" width="90px" src="images/logo.png"></a>
-            </li>
-        </ul>
-    </div>
+    
+<h1>Bus Arrival Time App</h1>
+<p>
+    Select a bus route from the dropdown box, and then select a bus stop on the map.  Your choices will be saved for next time.
+</p>
+<p>
+    You will then see the location of your bus updated every 30 seconds along with the ETA of its arrival at your stop.
+</p>
+<p>
+    This app is NOT responsible if you're late to school!!!!!
+</p>
+<select id="drpBus" onchange="javascript:routeSelected();">
+</select>
+<br/>
+<div class="flex-container">
+    <div id="divResult"></div>
+</div>
+<div id="divError"></div>
+<div id="divMap" style="width:800px;height:400px;margin: auto;padding: 10px;"></div>
+<div id="divZoom" style="margin: auto;padding: 10px;"></div>
+<a href="javascript:zoomIn();">Zoom In</a><br/>
+<a href="javascript:zoomOut();">Zoom Out</a><br/>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+    <script>
+		//This variable will hold the map, so I can zoom it in other methods
+		var map;
+		
+        //This variable will hold the bus marker, so I can move it when the user clicks on the map
+        var busMarker;
 
-	<p class="sectionheader">Placeholder for the bus tracker user app</p>
+        //This variable will hold the selected bus' latitude
+        var busLatitude;
+
+        //This variable will hold the selected bus' longitude
+        var busLongitude;
+
+        //This variable will hold the selected bus route
+        var selectedRoute;
+
+        //This variable will hold the selected bus stop latitude
+        var selectedStopLatitude;
+
+        //This variable will hold the selected bus stop longitude
+        var selectedStopLongitude;
+
+        //This variable will hold the JSON for all the bus routes and the bus stops
+        var busRoutesAndStops;
     
-    
+        //This variable will hold the busstop markers that we've loaded onto the map
+        var busStopMarkers;
+
+        //Set up the AWS Dynamo region to use
+        AWS.config.update({
+        region: "us-east-1" });
+
+
+        //Set up the AWS Cognito credentials - these are used to safely store logon details in a public webpage
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: "us-east-1:ebd9002f-af23-412c-96af-20182c4d7c6a",
+        RoleArn: "arn:aws:iam::933855562898:role/Cognito_BusIdentityPoolUnauth_Role"
+        });
+
+        //Set up the variables that we will use to access DynamoDB
+        var dynamodb = new AWS.DynamoDB();
+        var docClient = new AWS.DynamoDB.DocumentClient();
+
+        //This function shows the google map
+        //It will be called when the Google Maps script loads right at the bottom of this page
+		function displayMap() {
+			//This variable holds the map properties (Google Maps defines what this must look like)
+			var mapProp= {
+			  //We won't set a centre for the map so the map centres on the user's location automatically
+              //We'll set the centre later when a route is chosen
+              //center:new google.maps.LatLng(-36.8934912,174.8041728),
+			  zoom:16
+			};
+
+			//Create the map and show it in the divMap div
+			map = new google.maps.Map(document.getElementById("divMap"),mapProp);
+			showZoom();
+
+            //We have the map loaded, so load the bus route data
+            getJSON('./json/busroutes.json'); 
+		}
+
+        //This function gets the content of a file in JSON format from the server
+        function getJSON(path) {
+            return fetch(path)
+            .then(response => response.json())
+            .then(result => processJSON(result))
+            .catch(error => showError(error));
+        }        
+
+        //This function populates the JSON into the variable and populates the dropdown
+        function processJSON(JSONData){
+            busRoutesAndStops = JSONData;
+
+            //Populate the dropdown
+            var theDropdown = document.getElementById("drpBus");
+		
+            for (routeCounter in busRoutesAndStops.busroutes){
+                var theDropdownOption = document.createElement("option");
+                theDropdownOption.text = busdata.busroutes[routeCounter].name;
+                theDropdownOption.value = busdata.busroutes[routeCounter].id;
+                theDropdown.add(theDropdownOption);
+            }
+        }        
+
+        //This function runs whenever the route is changed
+        function routeSelected(){
+            
+            //Get the selected route from the dropdown
+            selectedRoute = document.getElementById("drpBus").value;
+
+            //Clear the existing route and bus stop markers and bus marker off the map
+            //TODO
+            
+            //Show the KML of the route
+            //TODO
+            
+            //Centre and zoom the map
+            //TODO
+            
+            //Load the bus stop markers
+            //TODO
+
+            //Show the bus location
+            readBusLocation();
+        }
+
+        //This function runs whenever a busstop is selected
+        function stopSelected(){
+            //Update the variables with the bus stop's lat and lng
+            //TODO
+        }
+
+        //This function shows the estimated time of arrival at the selected stop of the selected bus
+        function calculateETA(){
+            //Get and display the ETA
+            //TODO
+            
+            //Set the timer to update the info in 30 seconds
+            setTimeout(calculateETA,30000);
+        }
+        
+        //This function reads the bus location from the DB and sets the bus marker to that location
+        function readBusLocation(){
+            //Set up the parameters for DynamoDB (AWS defines the format)
+            var params = {
+                TableName: "BusLocations",
+                Key:{
+                    "RouteId": document.getElementById("drpBus").value //as we are reading, we only specify the RouteId (there is only one location stored per route)
+                }
+            };
+
+            //Use the AWS docClient object to read the data.  After the read is complete, the inline function is called.  This is asynchronous.
+            docClient.get(params, function(err, data) {
+                if (err) {
+                    //Something went wrong
+                    showError ("Error: " + "\n" + JSON.stringify(err, undefined, 2)); //The stringify parameters make the JSON look pretty!
+                } else {
+                    //We successfully read the location so update the variables
+                    busLatitude = data.Item.latitude;
+                    busLatitude = data.Item.longitude;
+                    
+                    //Display the location on the map
+                    displayBusMarker(busLatitude,busLatitude);
+                }
+            });
+
+            //Set the timer up to show the bus location - we do this every 20 seconds so the ETA calculation every 30 seconds has new data
+            setTimeout(readBusLocation,20000);
+        }
+
+        //This function displays the bus marker on the map
+        function displayBusMarker(lat, lng) {
+            //Have we already created the marker?
+            //If we haven't created it then the following line will be true
+            if (!marker) {
+                //Create the marker and set its position to the correct place, and set the icon we want to use
+                marker = new google.maps.Marker({
+					position:new google.maps.LatLng(lat, lng),
+					icon:'images/busmarker.png'
+				});
+                //Show the marker
+                marker.setMap(map);  
+            } else {
+                //The marker is already set up, so we can just move it
+                marker.setPosition(new google.maps.LatLng(lat, lng));
+            }
+        }
+
+        //This function zooms the google map in
+		function zoomIn(){
+			map.setZoom(map.getZoom()+1);
+			showZoom();
+		}
+		
+        //This function zooms the google map out
+		function zoomOut(){
+			map.setZoom(map.getZoom()-1);
+			showZoom();
+		}
+		
+        //This function shows the current zoom level of the google map
+		function showZoom(){
+			document.getElementById("divZoom").innerHTML = "Zoom = " + map.getZoom().toString();
+		}
+
+        //This function adds the supplied string to the end of what's already in the div
+        function showResultWithNewline(TextToShow) {
+            document.getElementById("divResult").innerHTML += TextToShow + "<br/>";
+        } 
+
+        //This function shows the error 
+        function showError(ErrorToShow){
+            document.getElementById('divError').innerHTML=ErrorToShow;
+        };        
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8eC68oituGsxoH7lZFc4xyZpV_AvhJkA&callback=displayMap"></script>
+
 </body>
 </html>

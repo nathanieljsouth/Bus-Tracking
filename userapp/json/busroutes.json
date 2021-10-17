@@ -1,0 +1,23 @@
+{
+	"busroutes": [
+		{
+			"id":"r17", "name":"Route 17", "kml":"r17.kml", "zoom":"16", "centrelat":"-36.8934912", "centrelng":"174.8041728",
+			"busstops":[
+				{"id":"s17-1", "name":"Route 17 Stop 1 - Sonia Avenue", "latitude":"-36.86702619814519", "longitude":"174.8000809354908"},
+				{"id":"s17-2", "name":"Route 17 Stop 2 - Combes Road", "latitude":"-36.87229756845526", "longitude":"174.7992701847352"},
+				{"id":"s17-3", "name":"Route 17 Stop 3 - Remuera Shops", "latitude":"-36.88084655686356", "longitude":"174.79990404444283"},
+				{"id":"s17-4", "name":"Route 17 Stop 4 - Upload Road Shops", "latitude":"-36.880304166749006", "longitude":"174.81368680737432"},
+				{"id":"s17-5", "name":"Route 17 Stop 5 - Waiatarua Road", "latitude":"-36.87887764817957", "longitude":"174.82257835740074"},
+				{"id":"s17-6", "name":"Route 17 Stop 6 - McFarland Street", "latitude":"-36.87956200649571", "longitude":"174.8265456954297"}
+			]
+		},
+		{
+			"id":"r20", "name":"Dummy Route 20", "kml":"r20.kml", "zoom":"16", "centrelat":"-36.8934912", "centrelng":"174.8041728",
+			"busstops":[
+				{"id":"s20-1", "name":"Route 20 Stop 1 - Landscape Road", "latitude":"-36.89874340030304", "longitude":"174.75704454724868"},
+				{"id":"s20-2", "name":"Route 20 Stop 2 - Mount Smart Road", "latitude":"-36.914838654509644", "longitude":"174.79995929685958"},
+				{"id":"s20-3", "name":"Route 20 Stop 3 - Route 10", "latitude":"-36.91470362541467", "longitude":"174.84831735873638"}
+			]
+		}
+	]
+}
