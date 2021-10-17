@@ -11,13 +11,6 @@
 
 <body>
     
-<div class="navigation">
-    <ul>
-        <li>
-            Bus Tracker App
-        </li>
-    </ul>
-</div>
 <h1>Bus Tracker App</h1>
 <div class="flex-container">
     <div id="divBusRoute"></div>
@@ -58,8 +51,8 @@
             //Display the route we're tracking
             document.getElementById("divBusRoute").innerHTML = "Tracking for route: " + busRoute;
 
-            //Start the timer off - we will be recording the location every 30 seconds (30000 milliseconds)
-            setTimeout(getAndRecordLocation, 30000);
+            //Start the timer off - we will be recording the location every 10 seconds (10000 milliseconds)
+            setTimeout(getAndRecordLocation, 10000);
         };        
 
         function getAndRecordLocation(){
