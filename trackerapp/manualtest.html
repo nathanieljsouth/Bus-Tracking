@@ -21,12 +21,9 @@
         </li>
     </ul>
 </div>
-<h1>Manual Bus Location</h1>
+<h1>Manual Bus Location Tool</h1>
 <p>
-    Chose a bus route and click the map to set the bus location.
-</p>
-<p>
-    Selecting a different route will display the current location of the bus on that route.
+    Select a bus route, and the current location will be displayed on the map.  After selecting a bus route, click on the map to set the bus location.
 </p>
     
 <p>
@@ -68,6 +65,7 @@
         //This variable will hold the bus marker, so I can move it when the user clicks on the map
         var marker;
 
+        //Set up the AWS Dynamo region to use
         AWS.config.update({
         region: "us-east-1" });
 
@@ -82,20 +80,22 @@
         var dynamodb = new AWS.DynamoDB();
         var docClient = new AWS.DynamoDB.DocumentClient();
 
-
+        //This function shows the google map and hooks up the code that runs when the map is clicked
 		function displayMap() {
 			//This variable holds the map properties (Google Maps defines what this must look like)
 			var mapProp= {
 			  center:new google.maps.LatLng(-36.8934912,174.8041728),
 			  zoom:16,
 			};
+
 			//Create the map and show it in the divMap div
 			map = new google.maps.Map(document.getElementById("divMap"),mapProp);
 			showZoom();
 
-            //Set up the event listener that will fire when clicked
+            //Set up the event listener that will fire when clicked - note that this code doesn't run when we show the map, it only runs when the user clicks the map
             map.addListener("click", (mapsMouseEvent) => {
                 //The latLng object has two 'getter' functions called lat() and lng()
+                //We call these to get the latitude and longitude that represent the location the user clicked on
                 var selectedLat = mapsMouseEvent.latLng.lat();
                 var selectedLng = mapsMouseEvent.latLng.lng();
 
@@ -113,7 +113,7 @@
             readBusLocation();
 		}
 
-        //This  function reads the bus location from the DB and sets the bus marker to that location
+        //This function reads the bus location from the DB and sets the bus marker to that location
         function readBusLocation(){
             //Set up the parameters for DynamoDB (AWS defines the format)
             var params = {
@@ -123,11 +123,13 @@
                 }
             };
 
-            //Use the docClient to read the data.  After the write is complete, the inline function is called.  This is asynchronous.
+            //Use the AWS docClient object to read the data.  After the read is complete, the inline function is called.  This is asynchronous.
             docClient.get(params, function(err, data) {
                 if (err) {
-                    showError ("Error: " + "\n" + JSON.stringify(err, undefined, 2));
+                    //Something went wrong
+                    showError ("Error: " + "\n" + JSON.stringify(err, undefined, 2)); //The stringify parameters make the JSON look pretty!
                 } else {
+                    //We successfully read the location so show it on the map
                     displayBusMarker(data.Item.latitude,data.Item.longitude);
                 }
             });
@@ -146,9 +148,10 @@
                     }
                 };
 
-            //Use the docClient to write the data to Dynamo.  After the write is complete, the inline function is called.  This is asynchronous.
+            //Use the AWS docClient object to write the data to Dynamo.  After the write is complete, the inline function is called.  This is asynchronous.
             docClient.put(params, function(err, data) {
                 if (err) {
+                    //Something went wrong
                     showError ("Error: " + "\n" + JSON.stringify(err, undefined, 2)); //The stringify parameters make the JSON look pretty!
                 } 
             });
@@ -157,8 +160,9 @@
         //This function displays the bus marker on the map
         function displayBusMarker(lat, lng) {
             //Have we already created the marker?
+            //If we haven't created it then the following line will be true
             if (!marker) {
-                //Create the marker and add it to the map in the correct place
+                //Create the marker and set its position to the correct place, and set the icon we want to use
                 marker = new google.maps.Marker({
 					position:new google.maps.LatLng(lat, lng),
 					icon:'images/busmarker.png'
@@ -166,21 +170,24 @@
                 //Show the marker
                 marker.setMap(map);  
             } else {
-                //The marker is already set up, so just move it
+                //The marker is already set up, so we can just move it
                 marker.setPosition(new google.maps.LatLng(lat, lng));
             }
         }
 
+        //This function zooms the google map in
 		function zoomIn(){
 			map.setZoom(map.getZoom()+1);
 			showZoom();
 		}
 		
+        //This function zooms the google map out
 		function zoomOut(){
 			map.setZoom(map.getZoom()-1);
 			showZoom();
 		}
 		
+        //This function shows the current zoom level of the google map
 		function showZoom(){
 			document.getElementById("divZoom").innerHTML = "Zoom = " + map.getZoom().toString();
 		}

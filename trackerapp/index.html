@@ -99,6 +99,7 @@
             //Use the AWS docClient object to write the data to Dynamo.  After the write is complete, the inline function is called.  This is asynchronous.
             docClient.put(params, function(err, data) {
                 if (err) {
+                    //Something went wrong
                     showError ("Save Error: " + "\n" + JSON.stringify(err, undefined, 2)); //The stringify parameters make the JSON look pretty!
                 } else {
                     //We successfully saved the location
