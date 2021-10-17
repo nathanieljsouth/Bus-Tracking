@@ -58,46 +58,42 @@
             //Display the route we're tracking
             document.getElementById("divBusRoute").innerHTML = "Tracking for route: " + busRoute;
 
-            //Start the timer off - we will be recording the location every 10 seconds (10000 milliseconds)
-            setTimeout(getAndRecordLocation, 10000);
+            //Check that this browser supports GPS
+            if (navigator.geolocation) {
+                //Start the timer off - we will be recording the location every 10 seconds (10000 milliseconds)
+                setTimeout(getAndRecordLocation, 10000);
+            }
+            else { 
+                showError ("GPS is not supported by this browser - it cannot be used for the bus tracker app");
+            }
         };        
 
         function getAndRecordLocation(){
             //Get the location - this will callback to the function that saves the location or shows the error
-            if (navigator.geolocation) {
-                //The getCurrentPositon method takes a callback function as a parameter for success and also one for error
-                navigator.geolocation.getCurrentPosition(recordGPSLocation, displayGPSError);
-            } else { 
-                showError ("Geolocation is not supported by this browser.");
-            }
+            navigator.geolocation.getCurrentPosition(recordGPSLocation, displayGPSError);
         }
 
         function displayGPSError(error){
             if (error.code==1){
-                showError(new Date() + ": Access to location denied by user");
+                showError("Access to location denied by user");
                 }
             else if (error.code==2){
-                showError(new Date() + ": Location unavailable");
+                showError("Location unavailable");
                 }
             else if (error.code==3){
-                showError(new Date() + ": Timeout while trying to get location");
+                showError("Timeout while trying to get location");
                 }
         }
 
-		function recordGPSLocation(position) {
-            //Save the location
-            writeBusLocation (busRoute, position.coords.latitude, position.coords.longitude);
-		}
-
         //This function writes the bus location (bus route, latitude and longitude) to DynamoDB
-        function writeBusLocation(route, lat, lng) {
+        function recordGPSLocation(position) {
             //Set up the parameters for DynamoDB (AWS defines the format)
             var params = {
                 TableName :"BusLocations", //This table has been set up in AWS
                 Item:{
-                    "RouteId": route, //The RouteId has been set up in AWS as the primary key so it must exist.
-                    "latitude": lat,
-                    "longitude": lng,
+                    "RouteId": busRoute, //The RouteId has been set up in AWS as the primary key so it must exist.
+                    "latitude": position.coords.latitude,
+                    "longitude": position.coords.longitude,
                     "timestamp": new Date().toISOString() //The ISO Date format is safe to use in any timezone
                     }
                 };
@@ -105,33 +101,28 @@
             //Use the docClient to write the data to Dynamo.  After the write is complete, the inline function is called.  This is asynchronous.
             docClient.put(params, function(err, data) {
                 if (err) {
-                    showError ("Error: " + "\n" + JSON.stringify(err, undefined, 2)); //The stringify parameters make the JSON look pretty!
+                    showError ("Save Error: " + "\n" + JSON.stringify(err, undefined, 2)); //The stringify parameters make the JSON look pretty!
                 } else {
                     //Display the location and the current local time so the user can see when the location was updated
                     showResults(
-                        "Timestamp: " + new Date() 
+                        "Stored Location" 
                         + "<br/>" 
-                        + "Lat: " + lat
+                        + "Lat: " + position.coords.latitude
                         + "<br/>" 
-                        + "Lng: " + lng
+                        + "Lng: " + position.coords.longitude
                         );
                 }
             });
         }
 
-        //This function adds the supplied string to the end of what's already in the div
-        function showResultWithNewline(TextToShow) {
-            document.getElementById("divResult").innerHTML += TextToShow + "<br/>";
-        } 
-
-        //This function shows the supplied string, replacing what was in the status before
+        //This function shows the supplied string, replacing what was in the status before, including the current time
         function showResults(TextToShow) {
-            document.getElementById("divResult").innerHTML = TextToShow;
+            document.getElementById("divResult").innerHTML = new Date() + ": " +  TextToShow;
         } 
 
-        //This function shows the error 
+        //This function shows the error with the current time so the user knows when the error happened
         function showError(ErrorToShow){
-            document.getElementById('divError').innerHTML=ErrorToShow;
+            document.getElementById("divError").innerHTML = new Date() + ": " +  ErrorToShow;
         };        
 </script>
 </body>
