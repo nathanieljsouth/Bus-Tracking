@@ -91,6 +91,7 @@
 
             //We have the map loaded, so load the bus route data
             getJSON('./json/busroutes.json'); 
+
 		}
 
         //This function gets the content of a file in JSON format from the server
@@ -114,6 +115,9 @@
                 theDropdownOption.value = busRoutesAndStops.busroutes[routeCounter].id;
                 theDropdown.add(theDropdownOption);
             }
+
+            //Select the first route
+            routeSelected();
         }        
 
         //This function runs whenever the route is changed
@@ -159,7 +163,7 @@
             var params = {
                 TableName: "BusLocations",
                 Key:{
-                    "RouteId": document.getElementById("drpBus").value //as we are reading, we only specify the RouteId (there is only one location stored per route)
+                    "RouteId": selectedRoute //as we are reading, we only specify the RouteId (there is only one location stored per route)
                 }
             };
 
@@ -174,7 +178,7 @@
                     busLatitude = data.Item.longitude;
                     
                     //Display the location on the map
-                    displayBusMarker(busLatitude,busLatitude);
+                    displayBusMarker();
                 }
             });
 
@@ -183,20 +187,20 @@
         }
 
         //This function displays the bus marker on the map
-        function displayBusMarker(lat, lng) {
+        function displayBusMarker() {
             //Have we already created the marker?
             //If we haven't created it then the following line will be true
             if (!marker) {
                 //Create the marker and set its position to the correct place, and set the icon we want to use
                 marker = new google.maps.Marker({
-					position:new google.maps.LatLng(lat, lng),
+					position:new google.maps.LatLng(busLatitude, busLongitude),
 					icon:'images/busmarker.png'
 				});
                 //Show the marker
                 marker.setMap(map);  
             } else {
                 //The marker is already set up, so we can just move it
-                marker.setPosition(new google.maps.LatLng(lat, lng));
+                marker.setPosition(new google.maps.LatLng(busLatitude, busLongitude));
             }
         }
 
