@@ -24,7 +24,13 @@
 <h1>Making the app better</h1>
 
 <p>A few thoughts I had to make the app even better are listed here.</p>
-    
+
+<p>At the moment it's possible to start recording the location of any bus route by simply running the bus tracker app page and providing a new bus route on the querystring.  This makes it really easy to set up a new route - literally all the bus driver needs to do is change the URL of the page and the app will start recording locations for that route imemdiately.  However, I think there should be a 'registration' step where a new route has to be approved before it can be tracked.  This would prevent accidental mistakes where a bus route is typed incorrectly, and also allow a manager to set up a specific list of routes that can be used.</p>
+
+<p>The user app allows Google maps to handle the calculation of a driving time between the bus location and the user's selectec bus stop.  However, Google's route may not follow the specified bus route and so this may result in an incorrect time of arrival.  It would be good to alter the app to provide each bus stop as a 'way-point' so Google calculates the correct route.</p>
+
+<p>If the bus has already passed the user's selected bus stop, the user will still see a positive ETA for the bus to arrive at their stop.  This is because Google doesn't know that the bus is following a specific route in one direction only.  It would be great to be able to understand when a bus has passed a given stop but this seems like a very hard problem to resolve.</p>
+
     
 </body>
 </html>

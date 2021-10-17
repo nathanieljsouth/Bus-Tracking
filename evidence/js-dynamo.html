@@ -47,7 +47,7 @@ I am going to be storing bus location data in AWS Dynamo DB so I need to be able
         region: "us-east-1" });
 
 
-        //Set up the AWS Cognito credentials - these are used instead to safely store the user details in a public webpage
+        //Set up the AWS Cognito credentials - these are used to safely store logon details in a public webpage
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({
         IdentityPoolId: "us-east-1:ebd9002f-af23-412c-96af-20182c4d7c6a",
         RoleArn: "arn:aws:iam::933855562898:role/Cognito_BusIdentityPoolUnauth_Role"

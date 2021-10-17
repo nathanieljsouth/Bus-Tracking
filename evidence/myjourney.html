@@ -50,7 +50,17 @@
 <p>I ended up having to set up an AWS Cognito 'identity pool' which works fine but it was not what I was expecting.</p>
 <p>Overall, I've realised that cloud services like Google Maps and AWS DynamoDB, are really powerful but there is a huge amount of complexity that I didn't realise I was going to run into when using them.  My estimates of how long this would take were way off - I'll learn from that in future.</p>
 
+<p>During user testing of the Tracker App, I received feedback that the display was too small to allow it to be quickly checked to see if things were running okay.  The text was all the same colour and size which meant it was really hard to quickly check.  It originally looked like this on a mobile device.</p>
+<img src="images/TrackerAppBefore.PNG" width="500px">
 
+<p>I changed the size and colours of the text.  I set the route in yellow, and successful messages in grenn, with errors in red.  I also shortened the timestamp so it was easier to read.</p>
+<img src="images/TrackerAppAfter.PNG" width="500px">
+
+<p>I had to learn to use asynchronous functions a LOT in this project.  Normally, code runs top-to-bottom and each line must complete before the next line is executed, so it's easy to understand when a certain piece of code will run.  However, obtaining GPS locations, requesting Google map directions, and reading and writing to DynamoDB are all asynchronous. 
+This means that you must provide a 'callback' function to them so when the work you've asked them to do is finished, they call the callback function to allow you to do the next piece of work you want to do.  
+This means that code is scattered around quite a bit and it's very hard to figure out what exactly is going to happen at any given time.  
+I understand that asynchronous functions are used to prevent the user interface from locking up while long-running things are taking place but it really alters how you construct your application and, to be honest, makes it pretty difficult to debug sometimes.
+</p>
 
 </body>
 </html>
