@@ -50,7 +50,7 @@
         busRoute = busRoute.replace("?","").trim();
 
         //if no bus route was supplied tell the user and exit
-        if(busRoute=""){
+        if(busRoute==""){
             showError ("Please supply a bus route identifier on the querystring");
         } else {
             //We have been given a route, so start tracking (note that any route identifier will do as this makes adding a enw route really easy)
