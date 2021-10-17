@@ -134,19 +134,15 @@
             //Get the selected index of the bus (0 for the first route, 1 for the second etc.) - we use this to access the bus route data array
             selectedRouteIndex = document.getElementById("drpBus").selectedIndex;
 
+            //Show the KML of the route
+            showBusRouteKML();
+            
             //Centre and zoom the map
             centreAndZoomMap();
 
-            //Show the KML of the route
-            showBusRouteKML();
-
-            //Clear the existing route and bus stop markers and bus marker off the map
-            //TODO
+            //Show the bus stop markers
+            showBusStops();
             
-            
-            //Load the bus stop markers
-            //TODO
-
             //Show the bus location
             readBusLocation();
         }
@@ -176,6 +172,12 @@
 				  preserveViewport: false,
 				  map: map
 				});
+
+        }
+
+        //This function shows the bus stops for the selected route - it clears out any previously displayed bus stops first
+        function showBusStops(){
+            //TODO
 
         }
 
@@ -216,7 +218,7 @@
                     displayBusMarker();
 
                     //Display the ETA
-                    //TODO 
+                    calculateETA();
                 }
             });
         }
