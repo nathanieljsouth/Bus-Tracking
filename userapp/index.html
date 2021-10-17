@@ -46,6 +46,9 @@
         //This variable will hold the selected bus route
         var selectedRoute;
 
+        //This variable will hold the selected index of the bus route (0 for the first route, 1 for the second etc.) This is used to access the bus route array
+        var selectedRouteIndex;
+
         //This variable will hold the selected bus stop latitude
         var selectedStopLatitude;
 
@@ -125,13 +128,16 @@
             //Get the selected route from the dropdown
             selectedRoute = document.getElementById("drpBus").value;
 
+            //Get the selected index of the bus (0 for the first route, 1 for the second etc.) - we use this to access the bus route data array
+            selectedRouteIndex = document.getElementById("drpBus").selectedIndex;
+
+            //Centre and zoom the map
+            centreAndZoomMap();
+
             //Clear the existing route and bus stop markers and bus marker off the map
             //TODO
             
             //Show the KML of the route
-            //TODO
-            
-            //Centre and zoom the map
             //TODO
             
             //Load the bus stop markers
@@ -141,8 +147,17 @@
             readBusLocation();
         }
 
+        //This function centres and zooms the map based on which bus route has been selected
+        function centreAndZoomMap(){
+            //Zoom the map to what is specified in the bus data
+            map.setZoom(busRoutesAndStops.busroutes[selectedRouteIndex].zoom);
+
+            //Centre the map to what is specified in the bus data
+            map.setCenter(new google.maps.LatLng(busRoutesAndStops.busroutes[selectedRouteIndex].centrelat,busRoutesAndStops.busroutes[selectedRouteIndex].centrelng));
+        }
+
         //This function runs whenever a busstop is selected
-        function stopSelected(){
+        function busStopSelected(){
             //Update the variables with the bus stop's lat and lng
             //TODO
         }
