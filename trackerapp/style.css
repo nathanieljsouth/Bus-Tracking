@@ -52,7 +52,7 @@ select option {
 
 .error{
     color: red;
-    
+    font-size: 20pt;
 }
 
 .title{
@@ -61,5 +61,10 @@ select option {
 
 .busRoute{
     color: yellow;
+    font-size: 20pt;
+}
+
+.success{
+    color: green;
     font-size: 20pt;
 }
