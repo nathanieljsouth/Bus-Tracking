@@ -29,9 +29,6 @@
 </div>
 <div id="divError"></div>
 <div id="divMap" style="width:800px;height:400px;margin: auto;padding: 10px;"></div>
-<div id="divZoom" style="margin: auto;padding: 10px;"></div>
-<a href="javascript:zoomIn();">Zoom In</a><br/>
-<a href="javascript:zoomOut();">Zoom Out</a><br/>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
     <script>
 		//This variable will hold the map, so I can zoom it in other methods
@@ -87,7 +84,6 @@
 
 			//Create the map and show it in the divMap div
 			map = new google.maps.Map(document.getElementById("divMap"),mapProp);
-			showZoom();
 
             //We have the map loaded, so load the bus route data
             getJSON('./json/busroutes.json'); 
@@ -204,23 +200,6 @@
                 busMarker.setPosition(new google.maps.LatLng(busLatitude, busLongitude));
             }
         }
-
-        //This function zooms the google map in
-		function zoomIn(){
-			map.setZoom(map.getZoom()+1);
-			showZoom();
-		}
-		
-        //This function zooms the google map out
-		function zoomOut(){
-			map.setZoom(map.getZoom()-1);
-			showZoom();
-		}
-		
-        //This function shows the current zoom level of the google map
-		function showZoom(){
-			document.getElementById("divZoom").innerHTML = "Zoom = " + map.getZoom().toString();
-		}
 
         //This function adds the supplied string to the end of what's already in the div
         function showResultWithNewline(TextToShow) {
