@@ -61,6 +61,9 @@
         //This variable will hold the busstop markers that we've loaded onto the map
         var busStopMarkers;
 
+        //THis variable will hold the kml route on the map
+        var kmlLayer;
+
         //Set up the AWS Dynamo region to use
         AWS.config.update({
         region: "us-east-1" });
@@ -134,11 +137,12 @@
             //Centre and zoom the map
             centreAndZoomMap();
 
+            //Show the KML of the route
+            showBusRouteKML();
+
             //Clear the existing route and bus stop markers and bus marker off the map
             //TODO
             
-            //Show the KML of the route
-            //TODO
             
             //Load the bus stop markers
             //TODO
@@ -154,6 +158,25 @@
 
             //Centre the map to what is specified in the bus data
             map.setCenter(new google.maps.LatLng(busRoutesAndStops.busroutes[selectedRouteIndex].centrelat,busRoutesAndStops.busroutes[selectedRouteIndex].centrelng));
+        }
+
+        //This function shows the KML for the selected bus route - it clears out any previously displayed KML first
+        function showBusRouteKML(){
+            //If we have already got a KML layer then remove it
+            if (kmlLayer){
+                //Setting the map to null removes the layer from the map
+                kmlLayer.setMap(null);
+            }
+
+            //Add the kml layer for the bus route
+			//suppressInfoWindows: true means not to show a popup when the user clicks
+			//preserveViewport: false means that the map will scroll and zoom to fit the route in the centre of the map
+            kmlLayer = new google.maps.KmlLayer(busRoutesAndStops.busroutes[selectedRouteIndex].kml, {
+				  suppressInfoWindows: true,
+				  preserveViewport: false,
+				  map: map
+				});
+
         }
 
         //This function runs whenever a busstop is selected
