@@ -1,7 +1,7 @@
 {
 	"busroutes": [
 		{
-			"id":"r17", "name":"Route 17", "kml":"r17.kml", "zoom":"9", "centrelat":"-36.88592668959716", "centrelng":"174.83460876976574",
+			"id":"r17", "name":"Route 17", "kml":"r17.kml", "zoom":"7", "centrelat":"-36.88592668959716", "centrelng":"174.83460876976574",
 			"busstops":[
 				{"id":"s17-1", "name":"Route 17 Stop 1 - Sonia Avenue", "latitude":"-36.86702619814519", "longitude":"174.8000809354908"},
 				{"id":"s17-2", "name":"Route 17 Stop 2 - Combes Road", "latitude":"-36.87229756845526", "longitude":"174.7992701847352"},
@@ -12,7 +12,7 @@
 			]
 		},
 		{
-			"id":"r20", "name":"Dummy Route 20", "kml":"r20.kml", "zoom":"9", "centrelat":"-36.9062993404545", "centrelng":"174.826893913584",
+			"id":"r20", "name":"Dummy Route 20", "kml":"r20.kml", "zoom":"7", "centrelat":"-36.9062993404545", "centrelng":"174.826893913584",
 			"busstops":[
 				{"id":"s20-1", "name":"Route 20 Stop 1 - Landscape Road", "latitude":"-36.89874340030304", "longitude":"174.75704454724868"},
 				{"id":"s20-2", "name":"Route 20 Stop 2 - Mount Smart Road", "latitude":"-36.914838654509644", "longitude":"174.79995929685958"},
