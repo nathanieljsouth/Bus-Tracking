@@ -41,9 +41,6 @@
 </div>
 <div id="divError"></div>
 <div id="divMap" style="width:800px;height:400px;margin: auto;padding: 10px;"></div>
-<div id="divZoom" style="margin: auto;padding: 10px;"></div>
-<a href="javascript:zoomIn();">Zoom In</a><br/>
-<a href="javascript:zoomOut();">Zoom Out</a><br/>
 <a href="javascript:viewSource();">View Source</a>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
     <script>
@@ -90,7 +87,6 @@
 
 			//Create the map and show it in the divMap div
 			map = new google.maps.Map(document.getElementById("divMap"),mapProp);
-			showZoom();
 
             //Set up the event listener that will fire when clicked - note that this code doesn't run when we show the map, it only runs when the user clicks the map
             map.addListener("click", (mapsMouseEvent) => {
@@ -174,23 +170,6 @@
                 marker.setPosition(new google.maps.LatLng(lat, lng));
             }
         }
-
-        //This function zooms the google map in
-		function zoomIn(){
-			map.setZoom(map.getZoom()+1);
-			showZoom();
-		}
-		
-        //This function zooms the google map out
-		function zoomOut(){
-			map.setZoom(map.getZoom()-1);
-			showZoom();
-		}
-		
-        //This function shows the current zoom level of the google map
-		function showZoom(){
-			document.getElementById("divZoom").innerHTML = "Zoom = " + map.getZoom().toString();
-		}
 
         //This function adds the supplied string to the end of what's already in the div
         function showResultWithNewline(TextToShow) {
