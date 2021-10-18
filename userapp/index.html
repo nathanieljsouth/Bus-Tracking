@@ -221,9 +221,13 @@
 
             //Animate the newly selected bus stop marker
             selectedStop.setAnimation(google.maps.Animation.BOUNCE);
+
+            //Calculate the ETA for newly selected stop
+            calculateETA();
         }
 
         //This function shows the estimated time of arrival at the selected stop of the selected bus
+        //It is called every 30 seconds, and also immediately when a new bus stop is selected
         function calculateETA(){
             //Get and display the ETA if the user has selected a bus stop (otherwise there is nothing to calculate)
             if (selectedStop){
