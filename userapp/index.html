@@ -227,7 +227,6 @@
         function calculateETA(){
             //Get and display the ETA if the user has selected a bus stop (otherwise there is nothing to calculate)
             if (selectedStop){
-                showResult ('Calc ETA for ' + selectedStop);
                 console.log('Calc ETA for ' + selectedStop.position.lat() + ',' + selectedStop.position.lng());
             }
         }
