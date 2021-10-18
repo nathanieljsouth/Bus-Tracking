@@ -172,16 +172,19 @@
         //This function shows the bus stops for the selected route - it clears out any previously displayed bus stops first
         //This also sets up the click handler on each bus stop marker so the user can select the bus stop
         function showBusStops(){
-            
+            console.log("1");
             //Remove all the existing busstop markers if there are any on the map
             if (busStopMarkers){
+                console.log("2");
                 for (removeCounter in busStopMarkers){
                     busStopMarkers[removeCounter].setMap(null);
                 }
             }
+            console.log("3");
 
             //Reset the array to an empty array
             busStopMarkers = [];
+            console.log("4");
 
             //Loop over all the bus stops for the selected route
             for (stopCounter in busRoutesAndStops.busroutes[selectedRouteIndex].busstops){
@@ -202,6 +205,7 @@
                 //Show the marker
                 newMarker.setMap(map);
             }
+            console.log("5");
 
         }
 
