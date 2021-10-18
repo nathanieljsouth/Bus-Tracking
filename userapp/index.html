@@ -46,8 +46,8 @@
         //This variable will hold the index of the selected bus route (0 for the first route, 1 for the second etc.) This is used to access the bus route array
         var selectedRouteIndex;
 
-        //This variable will hold the index of the selected bus stop (0 for the first stop, 1 for the second etc.) This is used to access the bus stop array
-        var selectedStopIndex = -1;
+        //This variable will hold the selected bus stop
+        var selectedStop;
 
         //This variable will hold the JSON for all the bus routes and the bus stops
         var busRoutesAndStops;
@@ -125,8 +125,8 @@
             //Get the selected index of the bus (0 for the first route, 1 for the second etc.) - we use this to access the bus route data array
             selectedRouteIndex = document.getElementById("drpBus").selectedIndex;
 
-            //Reset the selectedBusTopIndex to -1 
-            selectedStopIndex = -1;
+            //Reset the selected bus stop
+            selectedStopIndex = null;
 
             //Show the KML of the route
             showBusRouteKML();
@@ -196,7 +196,7 @@
 
                 //Add an event listener to the marker - when this is clicked this will select which bus-stop the user is interested in
                 google.maps.event.addListener(newMarker,'click',function() {
-                    busStopSelected(this, busStop.latitude, busStop.longitude);
+                    busStopSelected(this);
                 });
 
                 //Show the marker
@@ -209,38 +209,26 @@
         }
 
         //This function runs whenever a busstop is selected
-        function busStopSelected(clickedMarker, clickedLat, clickedLng){
-            //Stop the animation of the previously selected bus stop marker (if there was one).  The index is set to -1 as a default meaning that no stop is yet selected
-            console.log(clickedMarker);
-            console.log(clickedLat);
-            console.log(clickedLng);
-            console.log(clickedMarker.position.lat());
-            console.log(clickedMarker.position.lng());
+        function busStopSelected(clickedMarker){
 
-            return;
-            
-            if(selectedStopIndex > -1){
-                console.log(2);
-                busStopMarkers[selectedStopIndex].setAnimation(null);
+            //Stop the animation of the previously selected bus stop marker (if there was one).
+            if(selectedStop){
+                selectedStop.setAnimation(null);
             }
-            console.log(3);
 
-            //Update the variable to hold the index of the selected bus stop
-            selectedStopIndex=clickedIndex;
+            //Update the variable to hold the selected bus stop
+            selectedStop=clickedMarker;
 
-            console.log(4);
-
-            //Animate the newly selected bus stop marker to blue
-            busStopMarkers[selectedStopIndex].setAnimation(Animation.BOUNCE);
-
-            console.log(5);
+            //Animate the newly selected bus stop marker
+            selectedStop.setAnimation(Animation.BOUNCE);
         }
 
         //This function shows the estimated time of arrival at the selected stop of the selected bus
         function calculateETA(){
             //Get and display the ETA if the user has selected a bus stop (otherwise there is nothing to calculate)
-            if (selectedStopIndex>-1){
-                showResult ('Calc ETA for ' + selectedStopIndex);
+            if (selectedStop){
+                showResult ('Calc ETA for ' + selectedStop);
+                console.log('Calc ETA for ' + selectedStop.position.lat() + ',' + selectedStop.position.lng());
             }
         }
         
