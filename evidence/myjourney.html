@@ -56,7 +56,7 @@
 <p>I changed the size and colours of the text.  I set the route in yellow, and successful messages in grenn, with errors in red.  I also shortened the timestamp so it was easier to read.</p>
 <img src="images/TrackerAppAfter.PNG" width="500px">
 
-<p>I had to learn to use asynchronous functions a LOT in this project.  Normally, code runs top-to-bottom and each line must complete before the next line is executed, so it's easy to understand when a certain piece of code will run.  However, obtaining GPS locations, requesting Google map directions, and reading and writing to DynamoDB are all asynchronous. 
+<p>I had to learn to use asynchronous functions a LOT in this project.  Normally, code runs top-to-bottom and each line must complete before the next line is executed, so it's easy to understand when a certain piece of code will run.  However, the fetch() method, obtaining GPS locations, requesting Google map directions, and reading and writing to DynamoDB are all asynchronous. 
 This means that you must provide a 'callback' function to them so when the work you've asked them to do is finished, they call the callback function to allow you to do the next piece of work you want to do.  
 This means that code is scattered around quite a bit and it's very hard to figure out what exactly is going to happen at any given time.  
 I understand that asynchronous functions are used to prevent the user interface from locking up while long-running things are taking place but it really alters how you construct your application and, to be honest, makes it pretty difficult to debug sometimes.
