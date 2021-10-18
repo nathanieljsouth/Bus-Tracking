@@ -126,7 +126,7 @@
             selectedRouteIndex = document.getElementById("drpBus").selectedIndex;
 
             //Reset the selected bus stop
-            selectedStopIndex = null;
+            selectedStop = null;
 
             //Show the KML of the route
             showBusRouteKML();
@@ -196,7 +196,7 @@
 
                 //Add an event listener to the marker - when this is clicked this will select which bus-stop the user is interested in
                 google.maps.event.addListener(newMarker,'click',function() {
-                    busStopSelected(this, busStop);
+                    busStopSelected(this);
                 });
 
                 //Show the marker
@@ -209,10 +209,8 @@
         }
 
         //This function runs whenever a busstop is selected
-        function busStopSelected(clickedMarker, clickedStop){
+        function busStopSelected(clickedMarker){
 
-            console.log(clickedStop);
-            
             //Stop the animation of the previously selected bus stop marker (if there was one).
             if(selectedStop){
                 selectedStop.setAnimation(null);
