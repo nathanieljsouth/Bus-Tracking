@@ -188,22 +188,31 @@
 
             //Loop over all the bus stops for the selected route
             for (stopCounter in busRoutesAndStops.busroutes[selectedRouteIndex].busstops){
-                
+                console.log("Add");
+
+                //This variable holds each bus stop as we go around the loop
+                var busStop = busRoutesAndStops.busroutes[selectedRouteIndex].busstops[stopCounter]; 
+                console.log(busStop);
                 //Create a marker for each bus stop
                 var newMarker = new google.maps.Marker({
-                        position:new google.maps.LatLng(-36.910555286082634, 174.87601519824528)
+                        position:new google.maps.LatLng(busStop.latitude, busStop.longitude)
                     });
 
+                console.log("Show");
+                //Show the marker
+                newMarker.setMap(map);                    
+
+                console.log("push");
                 //Add the marker to the array
                 busStopMarkers.push(newMarker);
 
+                console.log("listen");
                 //Add an event listener to the marker - when this is clicked this will select which bus-stop the user is interested in
                 google.maps.event.addListener(newMarker,'click',function() {
                     busStopSelected(stopCounter);
                 });
 
-                //Show the marker
-                newMarker.setMap(map);
+
             }
             console.log("5");
 
