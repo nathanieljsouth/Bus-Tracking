@@ -123,6 +123,9 @@
             //Reset the selected bus stop
             selectedStop = null;
 
+            //Clear out the ETA
+            showResult("");
+
             //Show the KML of the route
             showBusRouteKML();
             
@@ -199,7 +202,6 @@
 
                 //Add the marker to the array
                 busStopMarkers.push(newMarker);
-
             }
         }
 
@@ -228,11 +230,44 @@
             if (selectedStop){
                 console.log('Calc ETA for ' + selectedStop.position.lat() + ',' + selectedStop.position.lng());
 
-                //Show the estimated time of arrival, and how many minutes that is from now
-                showResult("Bus Arriving In nnn Minutes (10:15)");
+                //These variables hold the location of the bus and the bus stop the user has selected
+                var locationBus = new google.maps.LatLng(busLatitude, busLongitude);
+                var locationBusStop = new google.maps.LatLng(selectedStop.position.lat(), selectedStop.position.lng());
+                
+                //The DirectionService object provides routing functions
+                var mapDirectionService = new google.maps.DirectionsService()
+
+                //Call the route() method supplying the data needed to define the route, and state that we want driving directions
+                mapDirectionService.route(
+                        {
+                            origin: locationBus,
+                            destination: locationBusStop,
+                            travelMode: "DRIVING"
+                        },
+                        (response, status) => {
+                            processRoutingResponse(response);
+                            console.log(status);
+                        }
+                )
+
             }
         }
         
+        //This function handles the Google maps routing response and displays the results
+        function processRoutingResponse(routingResponse){
+
+            //The duration.value is the time in seconds
+            var durationSeconds = parseInt(routingResponse.routes[0].legs[0].duration.value);
+
+            //Add the number of seconds to the current time to get the ETA
+            var arrivalTime = new Date()
+            arrivalTime.setSeconds(arrivalTime.getSeconds() + durationSeconds);
+            alert ('The ETA is ' + arrivalTime.toString());
+
+            //Show the estimated time of arrival, and how many minutes that is from now
+            showResult("Bus ETA: " + routingResponse.routes[0].legs[0].duration.text + " (" + arrivalTime.toString() + ")");
+        }
+
         //This function reads the bus location from the DB and sets the bus marker to that location
         function readBusLocation(){
             //Set up the parameters for DynamoDB (AWS defines the format)
