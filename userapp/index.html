@@ -13,10 +13,10 @@
     
 <h1>Bus Arrival Time App</h1>
 <p>
-    Select a bus route from the dropdown box, and then select a bus stop on the map.  Your choices will be saved for next time.
+    Select a bus route from the dropdown box to see the route, bus stops and bus location on the map.  The bus location is updated every 30 seconds.
 </p>
 <p>
-    You will then see the location of your bus updated every 30 seconds along with the ETA of its arrival at your stop.
+    Chose your bus stop by clicking it (it will bounce!) and you will see the ETA of the bus arrival at your stop.
 </p>
 <p>
     This app is NOT responsible if you're late to school!!!!!
@@ -232,6 +232,7 @@
             //Get and display the ETA if the user has selected a bus stop (otherwise there is nothing to calculate)
             if (selectedStop){
                 console.log('Calc ETA for ' + selectedStop.position.lat() + ',' + selectedStop.position.lng());
+                showResult("Bus Arriving In<br/>nnn Minutes");
             }
         }
         
