@@ -68,9 +68,3 @@ select option {
     color: lime;
     font-size: 20pt;
 }
-
-.mapDiv{
-    flex: 1;  /* 1 and it will fill whole space left if no flex value are set to other children*/
-    overflow: auto;
-    height: 100vh;
-}
