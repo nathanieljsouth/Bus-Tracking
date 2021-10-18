@@ -13,15 +13,15 @@
     
 <h1>Bus Arrival Time App</h1>
 <p>
-    Select a bus route from the dropdown box to see the route, bus stops and bus location on the map.  The bus location is updated every 30 seconds.
-    Chose your bus stop by clicking it (it will bounce!) and you will see the ETA of the bus arrival at your stop.
+    Select a bus route from the dropdown box to see the route, bus stops and bus location on the map.
+    Choose your bus stop by clicking it (it will bounce!) and you will see the ETA of the bus arrival at your stop. The bus location and ETA is updated every 30 seconds.
 </p>
 <select id="drpBus" onchange="javascript:routeSelected();">
 </select>
 <br/>
 <div class="flex-container">
     <div id="divResult" class="success"></div>
-    <div id="divMap" class="mapDiv" style="width:90%;height:800px; margin: auto;padding: 10px;"></div>
+    <div id="divMap" class="mapDiv" style="width:90%;height:750px; margin: auto;padding: 10px;"></div>
 </div>
 <div id="divError"></div>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
@@ -229,7 +229,7 @@
                 console.log('Calc ETA for ' + selectedStop.position.lat() + ',' + selectedStop.position.lng());
 
                 //Show the estimated time of arrival, and how many minutes that is from now
-                showResult("Bus Arriving In<br/>nnn Minutes");
+                showResult("Bus Arriving In nnn Minutes (10:15)");
             }
         }
         
