@@ -32,10 +32,10 @@
         //This variable will hold the bus marker, so I can move it when the user clicks on the map
         var busMarker;
 
-        //This variable will hold the selected bus' latitude
+        //This variable will hold the bus latitude
         var busLatitude;
 
-        //This variable will hold the selected bus' longitude
+        //This variable will hold the bus longitude
         var busLongitude;
 
         //This variable will hold the index of the selected bus route (0 for the first route, 1 for the second etc.) This is used to access the bus route array
@@ -224,12 +224,11 @@
         }
 
         //This function shows the estimated time of arrival at the selected stop of the selected bus
-        //It is called every 30 seconds, and also immediately when a new bus stop is selected
+        //It is called every 20 seconds, and also immediately when a new bus stop is selected
         function calculateETA(){
             //Get and display the ETA if the user has selected a bus stop (otherwise there is nothing to calculate)
             if (selectedStop){
-                console.log('Calc ETA for ' + selectedStop.position.lat() + ',' + selectedStop.position.lng());
-
+               
                 //These variables hold the location of the bus and the bus stop the user has selected
                 var locationBus = new google.maps.LatLng(busLatitude, busLongitude);
                 var locationBusStop = new google.maps.LatLng(selectedStop.position.lat(), selectedStop.position.lng());
@@ -249,7 +248,6 @@
                             console.log(status);
                         }
                 )
-
             }
         }
         
