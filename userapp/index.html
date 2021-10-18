@@ -196,8 +196,7 @@
 
                 //Add an event listener to the marker - when this is clicked this will select which bus-stop the user is interested in
                 google.maps.event.addListener(newMarker,'click',function() {
-                    alert('clicked');
-                    busStopSelected(stopCounter);
+                    busStopSelected(this);
                 });
 
                 //Show the marker
@@ -210,9 +209,10 @@
         }
 
         //This function runs whenever a busstop is selected
-        function busStopSelected(clickedIndex){
+        function busStopSelected(clickedMarker){
             //Stop the animation of the previously selected bus stop marker (if there was one).  The index is set to -1 as a default meaning that no stop is yet selected
-            console.log("1 - Clicked with index " + clickedIndex);
+            console.log("1 - Clicked with marker " + clickedMarker);
+            
             if(selectedStopIndex > -1){
                 console.log(2);
                 busStopMarkers[selectedStopIndex].setAnimation(null);
