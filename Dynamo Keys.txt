@@ -1,0 +1,52 @@
+AWS DynamoDB
+Table Name BusLocations
+Primary Key RouteId
+arn:aws:dynamodb:us-east-1:933855562898:table/BusLocations
+
+Users
+BusTracker - Dynamo Full access
+AKIA5S3RBBSJHVYCIEJE
+UWr/LVRYfyqLB3Tz6QI+y16a+kuFSQbw3NVyvdfw
+
+The above was deleted - the below one is active
+AKIA5S3RBBSJA2TKMQ57
+3Z5+nsNexTYwjB9mIy6N891tAh6G1vJ+kGw9p9u4
+
+
+
+BusUser - Dynamo Read Only
+AKIA5S3RBBSJDV474VMI
+7ozWMGBItrWckoFhinKSIEFgMPuwgVMSIMAWdlnG
+
+
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.988.0.min.js"></script>
+
+
+Identity pool ID 
+us-east-1:ebd9002f-af23-412c-96af-20182c4d7c6a
+Identity Pool ARN 
+arn:aws:cognito-identity:us-east-1:933855562898:identitypool/us-east-1:ebd9002f-af23-412c-96af-20182c4d7c6a
+
+
+
+			
+			
+    AWS.config.update({
+        region: "us-east-1" });
+        //,
+    //    //Look into changing from keys to cognito
+    //    accessKeyId: "AKIA5S3RBBSJHVYCIEJE",
+    //    secretAccessKey: "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"
+    //    });
+	
+	
+	After ] in Resource
+,
+            "Condition": {
+                "StringLike": {
+                    "aws:referer": [
+                        "https://nathanieljsouth.github.io/*"
+                    ]
+                }
+            }
+			

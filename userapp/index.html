@@ -14,7 +14,7 @@
 <h1>Bus Arrival Time App</h1>
 <p>
     Select a bus route from the dropdown box to see the route, bus stops and bus location on the map.
-    Choose your bus stop by clicking it (it will bounce!) and you will see the ETA of the bus arrival at your stop. The bus location and ETA is updated every 30 seconds.
+    Choose your bus stop by clicking it (it will bounce!) and you will see the ETA of the bus arrival at your stop. The bus location and ETA is updated every 20 seconds.
 </p>
 <select id="drpBus" onchange="javascript:routeSelected();">
 </select>
@@ -80,12 +80,13 @@
 			//Create the map and show it in the divMap div
 			map = new google.maps.Map(document.getElementById("divMap"),mapProp);
 
-            //We have the map loaded, so load the bus route data
+            //We have the map loaded, so load the bus route and bus stop data
             getJSON('./json/busroutes.json'); 
 
 		}
 
-        //This function gets the content of a file in JSON format from the server
+        //This function gets the content of a specified file in JSON format from the server
+        //This is an asynchronous call.  Once the file is retrieved, the 'processJSON' function is called
         function getJSON(path) {
             return fetch(path)
             .then(response => response.json())
@@ -95,22 +96,28 @@
 
         //This function populates the JSON into the variable and populates the dropdown
         function processJSON(JSONData){
+
+            //The passed-in JSONData is the JSON object containing all the bus routes and stops
             busRoutesAndStops = JSONData;
 
             //Populate the dropdown
             var theDropdown = document.getElementById("drpBus");
 		
+            //Loop over all the bus routes and put them into the dropdown
             for (routeCounter in busRoutesAndStops.busroutes){
+                //Create an option element for each bus route
                 var theDropdownOption = document.createElement("option");
                 theDropdownOption.text = busRoutesAndStops.busroutes[routeCounter].name;
                 theDropdownOption.value = busRoutesAndStops.busroutes[routeCounter].id;
+                
+                //Add the option element to the dropdown
                 theDropdown.add(theDropdownOption);
             }
 
-            //Select the first route
+            //The first bus route will be selected in the dropdown so fire the code that normally fires when the user clicks on a route
             routeSelected();
 
-            //Set the timer up to show the bus location - we do this every 20 seconds so the ETA calculation every 30 seconds has new data
+            //Set the timer up to show the bus location - we do this every 20 seconds
             setInterval(readBusLocation,20000);
         }        
 
@@ -126,8 +133,8 @@
             //Clear out the ETA
             showResult("");
 
-            //Show the KML of the route
-            showBusRouteKML();
+            //Show the driving route of the bus
+            showBusRouteOnMap();
             
             //Centre and zoom the map
             centreAndZoomMap();
@@ -149,7 +156,7 @@
         }
 
         //This function shows the KML for the selected bus route - it clears out any previously displayed KML first
-        function showBusRouteKML(){
+        function showBusRouteOnMap(){
             //If we have already got a KML layer then remove it
             if (kmlLayer){
                 //Setting the map to null removes the layer from the map
@@ -174,6 +181,7 @@
             //Remove all the existing busstop markers if there are any on the map
             if (busStopMarkers){
                 for (removeCounter in busStopMarkers){
+                    //Setting the map to null for each marker removes the marker from the map
                     busStopMarkers[removeCounter].setMap(null);
                 }
             }
@@ -194,6 +202,7 @@
 
                 //Add an event listener to the marker - when this is clicked this will select which bus-stop the user is interested in
                 google.maps.event.addListener(newMarker,'click',function() {
+                    //Call out to the busStopSelected function passing in the marker that's been clicked by using the 'this' keyword which is the object that was clicked
                     busStopSelected(this);
                 });
 
@@ -237,6 +246,7 @@
                 var mapDirectionService = new google.maps.DirectionsService()
 
                 //Call the route() method supplying the data needed to define the route, and state that we want driving directions
+                //Once google has created the directions, it calls back to the 'processRoutingResponse' method passing in the response
                 mapDirectionService.route(
                         {
                             origin: locationBus,
@@ -254,6 +264,7 @@
         //This function handles the Google maps routing response and displays the results
         function processRoutingResponse(routingResponse){
 
+            //Google can return multiple routes, but we'll just take the first one.  We are presuming there is a single 'leg' to the route
             //The duration.value is the time in seconds
             var durationSeconds = parseInt(routingResponse.routes[0].legs[0].duration.value);
 
@@ -262,10 +273,12 @@
             arrivalTime.setSeconds(arrivalTime.getSeconds() + durationSeconds);
 
             //Show the estimated time of arrival, and how many minutes that is from now
+            //The toLocaleTimeString function returns a time in the user's local timezone and formatted in their time format
             showResult("Bus ETA: " + routingResponse.routes[0].legs[0].duration.text + " (" + arrivalTime.toLocaleTimeString() + ")");
         }
 
-        //This function reads the bus location from the DB and sets the bus marker to that location
+        //This function reads the bus location from Dynamo DB and sets the bus marker to that location.
+        //It also initiates the calculation for the arrival time of the bus
         function readBusLocation(){
             //Set up the parameters for DynamoDB (AWS defines the format)
             var params = {
@@ -312,7 +325,7 @@
             }
         }
 
-        //This function adds the supplied string to the end of what's already in the div
+        //This function shows the message in the result div
         function showResult(TextToShow) {
             document.getElementById("divResult").innerHTML = TextToShow
         } 

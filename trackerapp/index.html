@@ -71,16 +71,13 @@
         //This function starts the timer - each time the timer fires we will record the location of the bus
         function startTimer(){
             //Start the timer off - we will be recording the location every 10 seconds (10000 milliseconds)
-            setTimeout(getAndRecordLocation, 10000);
+            setInterval(getAndRecordLocation, 10000);
         }
 
         //This function asks the browser for the current location and provides two callback functions
         function getAndRecordLocation(){
             //Get the location - we provide two callback functions, one to save the location and one to handle any error
             navigator.geolocation.getCurrentPosition(recordGPSLocation, displayGPSError);
-
-            //Start the timer again - we do this here because we want to start the timer again even if we failed to save the location once for any reason
-            startTimer();            
         }
 
         //This function writes the bus location (bus route, latitude and longitude) to DynamoDB
