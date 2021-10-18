@@ -262,8 +262,7 @@
             //Add the number of seconds to the current time to get the ETA
             var arrivalTime = new Date()
             arrivalTime.setSeconds(arrivalTime.getSeconds() + durationSeconds);
-            alert ('The ETA is ' + arrivalTime.toString());
-
+            
             //Show the estimated time of arrival, and how many minutes that is from now
             showResult("Bus ETA: " + routingResponse.routes[0].legs[0].duration.text + " (" + arrivalTime.toString() + ")");
         }
