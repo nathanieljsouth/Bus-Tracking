@@ -176,7 +176,7 @@
             //Remove all the existing busstop markers if there are any on the map
             if (busStopMarkers){
                 for (removeCounter in busStopMarkers){
-                    busStopMarkers.setMap(null);
+                    busStopMarkers[removeCounter].setMap(null);
                 }
             }
 
