@@ -172,46 +172,39 @@
         //This function shows the bus stops for the selected route - it clears out any previously displayed bus stops first
         //This also sets up the click handler on each bus stop marker so the user can select the bus stop
         function showBusStops(){
-            console.log("1");
+
             //Remove all the existing busstop markers if there are any on the map
             if (busStopMarkers){
-                console.log("2");
                 for (removeCounter in busStopMarkers){
                     busStopMarkers[removeCounter].setMap(null);
                 }
             }
-            console.log("3");
 
             //Reset the array to an empty array
             busStopMarkers = [];
-            console.log("4");
 
             //Loop over all the bus stops for the selected route
             for (stopCounter in busRoutesAndStops.busroutes[selectedRouteIndex].busstops){
-                console.log("Add");
 
                 //This variable holds each bus stop as we go around the loop
                 var busStop = busRoutesAndStops.busroutes[selectedRouteIndex].busstops[stopCounter]; 
-                console.log(busStop);
+
                 //Create a marker for each bus stop
                 var newMarker = new google.maps.Marker({
                         position:new google.maps.LatLng(busStop.latitude, busStop.longitude)
                     });
 
-                console.log("Show");
-                //Show the marker
-                newMarker.setMap(map);                    
-
-                console.log("push");
-                //Add the marker to the array
-                busStopMarkers.push(newMarker);
-
-                console.log("listen");
                 //Add an event listener to the marker - when this is clicked this will select which bus-stop the user is interested in
                 google.maps.event.addListener(newMarker,'click',function() {
+                    alert('clicked');
                     busStopSelected(stopCounter);
                 });
 
+                //Show the marker
+                newMarker.setMap(map);                    
+
+                //Add the marker to the array
+                busStopMarkers.push(newMarker);
 
             }
             console.log("5");
@@ -221,15 +214,22 @@
         //This function runs whenever a busstop is selected
         function busStopSelected(clickedIndex){
             //Stop the animation of the previously selected bus stop marker (if there was one).  The index is set to -1 as a default meaning that no stop is yet selected
+            console.log("1 - Clicked with index " + clickedIndex);
             if(selectedStopIndex > -1){
+                console.log(2);
                 busStopMarkers[selectedStopIndex].setAnimation(null);
             }
+            console.log(3);
 
             //Update the variable to hold the index of the selected bus stop
             selectedStopIndex=clickedIndex;
 
+            console.log(4);
+
             //Animate the newly selected bus stop marker to blue
-            busStopMarkers[clickedIndex].setAnimation(Animation.BOUNCE);
+            busStopMarkers[selectedStopIndex].setAnimation(Animation.BOUNCE);
+
+            console.log(5);
         }
 
         //This function shows the estimated time of arrival at the selected stop of the selected bus
