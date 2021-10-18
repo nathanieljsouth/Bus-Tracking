@@ -43,17 +43,11 @@
         //This variable will hold the selected bus' longitude
         var busLongitude;
 
-        //This variable will hold the selected bus route
-        var selectedRoute;
-
-        //This variable will hold the selected index of the bus route (0 for the first route, 1 for the second etc.) This is used to access the bus route array
+        //This variable will hold the index of the selected bus route (0 for the first route, 1 for the second etc.) This is used to access the bus route array
         var selectedRouteIndex;
 
-        //This variable will hold the selected bus stop latitude
-        var selectedStopLatitude;
-
-        //This variable will hold the selected bus stop longitude
-        var selectedStopLongitude;
+        //This variable will hold the index of the selected bus stop (0 for the first stop, 1 for the second etc.) This is used to access the bus stop array
+        var selectedStopIndex = -1;
 
         //This variable will hold the JSON for all the bus routes and the bus stops
         var busRoutesAndStops;
@@ -61,7 +55,7 @@
         //This variable will hold the busstop markers that we've loaded onto the map
         var busStopMarkers;
 
-        //THis variable will hold the kml route on the map
+        //This variable will hold the kml route on the map
         var kmlLayer;
 
         //Set up the AWS Dynamo region to use
@@ -128,11 +122,11 @@
         //This function runs whenever the route is changed
         function routeSelected(){
             
-            //Get the selected route from the dropdown
-            selectedRoute = document.getElementById("drpBus").value;
-
             //Get the selected index of the bus (0 for the first route, 1 for the second etc.) - we use this to access the bus route data array
             selectedRouteIndex = document.getElementById("drpBus").selectedIndex;
+
+            //Reset the selectedBusTopIndex to -1 
+            selectedStopIndex = -1;
 
             //Show the KML of the route
             showBusRouteKML();
@@ -176,22 +170,61 @@
         }
 
         //This function shows the bus stops for the selected route - it clears out any previously displayed bus stops first
+        //This also sets up the click handler on each bus stop marker so the user can select the bus stop
         function showBusStops(){
-            //TODO
+            
+            //Remove all the existing busstop markers if there are any on the map
+            if (busStopMarkers){
+                for (removeCounter in busStopMarkers){
+                    busStopMarkers.setMap(null);
+                }
+            }
+
+            //Reset the array to an empty array
+            busStopMarkers = [];
+
+            //Loop over all the bus stops for the selected route
+            for (stopCounter in busRoutesAndStops.busroutes[selectedRouteIndex].busstops){
+                
+                //Create a marker for each bus stop
+                var newMarker = new google.maps.Marker({
+                        position:new google.maps.LatLng(-36.910555286082634, 174.87601519824528)
+                    });
+
+                //Add the marker to the array
+                busStopMarkers.push(newMarker);
+
+                //Add an event listener to the marker - when this is clicked this will select which bus-stop the user is interested in
+                google.maps.event.addListener(newMarker,'click',function() {
+                    busStopSelected(stopCounter);
+                });
+
+                //Show the marker
+                newMarker.setMap(map);
+            }
 
         }
 
         //This function runs whenever a busstop is selected
-        function busStopSelected(){
-            //Update the variables with the bus stop's lat and lng
-            //TODO
+        function busStopSelected(clickedIndex){
+            //Stop the animation of the previously selected bus stop marker (if there was one).  The index is set to -1 as a default meaning that no stop is yet selected
+            if(selectedStopIndex > -1){
+                busStopMarkers[selectedStopIndex].setAnimation(null);
+            }
+
+            //Update the variable to hold the index of the selected bus stop
+            selectedStopIndex=clickedIndex;
+
+            //Animate the newly selected bus stop marker to blue
+            busStopMarkers[clickedIndex].setAnimation(Animation.BOUNCE);
         }
 
         //This function shows the estimated time of arrival at the selected stop of the selected bus
         function calculateETA(){
-            //Get and display the ETA
-            //TODO
-
+            //Get and display the ETA if the user has selected a bus stop (otherwise there is nothing to calculate)
+            if (selectedStopIndex>-1){
+                showResult ('Calc ETA for ' + selectedStopIndex);
+            }
         }
         
         //This function reads the bus location from the DB and sets the bus marker to that location
@@ -200,7 +233,7 @@
             var params = {
                 TableName: "BusLocations",
                 Key:{
-                    "RouteId": selectedRoute //as we are reading, we only specify the RouteId (there is only one location stored per route)
+                    "RouteId": busRoutesAndStops.busroutes[selectedRouteIndex].id //as we are reading, we only specify the Route Id (there is only one location stored per route)
                 }
             };
 
@@ -242,8 +275,8 @@
         }
 
         //This function adds the supplied string to the end of what's already in the div
-        function showResultWithNewline(TextToShow) {
-            document.getElementById("divResult").innerHTML += TextToShow + "<br/>";
+        function showResult(TextToShow) {
+            document.getElementById("divResult").innerHTML = TextToShow
         } 
 
         //This function shows the error 
