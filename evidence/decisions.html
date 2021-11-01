@@ -27,13 +27,6 @@
 <br/>    
 <p>I decided to only store the most recent location of each bus route.  This was because I only need the most recent location to enable the user app to work, and also to restrict the amount of storage the app needs.  Also, this prevents the bus driver's privacy from being invaded by recording all the bus' movements permanently</p>
 <br/>
-
-<p>I decided to display a 'confidence level' for the estimated time of arrival of the bus based upon how old the location data for the bus was.  This was because making an estimated on old data is very unreliable and the user needs to know whether they can trust the estimate.<p>
-<br/>
-
-<p>I decided to not trust any location data older than 20 minutes.  If the bus location data is older than 20 minutes I display a message saying the bus hasn't checked in recently.<p>
-<br/>
-
 <p>I decided to not display a scheduled time that the bus is due to arrive at a stop.  This was because the users are interested in when the bus is going to arrive, not when it was meant to arrive.</p>
 <br/>
 
@@ -46,10 +39,13 @@
 <p>I decided to store all the routes and their stops in a single JSON file.  This was because separating them out was actually more work and made it easier to make mistakes, and JSON is great for structures like this.</p>
 <br/>
 
+<p>I decided to add the bus stops onto the map in code rather than include them in the KML layer.  This was because if you include markers in a KML layer you cannot access them in javascript so I couldn't figure out a way to animate a marker when it was clicked.</p>
+<br/>
+
 <p>I decided to specify the centre of the map for each route separately, along with the zoom value.  This was because each route could cover different size areas, and I wanted to always centre the map around the route and not around the user.</p>
 <br/>
 
-<p>I decided to remove the links I added to the pages to zoom the map in and out, and show the zoom level.  THis is because the map itself has zoom controls and people are used to pinching on mobile devices to zoom the map.</p>
+<p>I decided to remove the links I added to the pages to zoom the map in and out, and show the zoom level.  This is because the map itself has zoom controls and people are used to pinching on mobile devices to zoom the map.</p>
 <br/>
 
     
